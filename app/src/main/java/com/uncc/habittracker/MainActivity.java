@@ -1,7 +1,13 @@
 package com.uncc.habittracker;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
@@ -11,16 +17,58 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnItemSelectedListener(navListener);
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.rootView, new LoginFragment())
                     .commit();
-        } else {
+
+            // Since we are signing in set bottom navigation to invisible
+            bottomNav.setVisibility(View.INVISIBLE);
+        }
+        else {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.rootView, new HabitsFragment())
                     .commit();
+
+            // Auth successful, set bottom navigation to visible and pre-select the Dashboard
+            bottomNav.setVisibility(View.VISIBLE);
+            bottomNav.setSelectedItemId(R.id.dashboard);
         }
     }
+
+    private final BottomNavigationView.OnItemSelectedListener navListener = item -> {
+        // By using switch we can easily get the selected fragment by using its id.
+        Fragment selectedFragment = null;
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.dashboard) {
+            selectedFragment = new DashboardFragment();
+        }
+        else if (itemId == R.id.following) {
+            selectedFragment = new FollowingFragment();
+        }
+        else if (itemId == R.id.habits) {
+            selectedFragment = new HabitsFragment();
+        }
+        else if (itemId == R.id.events) {
+            selectedFragment = new EventsFragment();
+        }
+        else if (itemId == R.id.settings) {
+            selectedFragment = new SettingsFragment();
+        }
+
+        if (selectedFragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.rootView, selectedFragment)
+                    .commit();
+        }
+
+        return true;
+    };
+
     @Override
     public void createNewAccount() {
         getSupportFragmentManager().beginTransaction()
@@ -33,6 +81,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new LoginFragment())
                 .commit();
+
+        // Since we are signing in set bottom navigation to invisible
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -40,6 +92,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new HabitsFragment())
                 .commit();
+
+        // Set bottom navigation to visible and pre-select the Dashboard
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.VISIBLE);
+        bottomNav.setSelectedItemId(R.id.dashboard);
     }
 
     @Override
@@ -56,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new LoginFragment())
                 .commit();
+
+        // Since we are signing out set bottom navigation to invisible
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.INVISIBLE);
     }
 
     @Override
