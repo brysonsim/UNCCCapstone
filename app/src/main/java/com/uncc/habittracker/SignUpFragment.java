@@ -62,7 +62,7 @@ public class SignUpFragment extends Fragment {
                 if (lastName.isEmpty()) {
                     Toast.makeText(getActivity(), "Enter valid last name!", Toast.LENGTH_SHORT).show();
                 }
-                else if(email.isEmpty()) {
+                else if(email.isEmpty() && (email.matches("[A-Za-z0-9]+@uncc\\.edu") || email.matches("[A-Za-z0-9]+@charlotte\\.edu"))) {
                     Toast.makeText(getActivity(), "Enter valid email!", Toast.LENGTH_SHORT).show();
                 }
                 else if (password.isEmpty()) {
