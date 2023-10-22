@@ -18,7 +18,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.uncc.habittracker.databinding.FragmentSignUpBinding;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SignUpFragment extends Fragment {
     public SignUpFragment() {
@@ -82,7 +88,27 @@ public class SignUpFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            mListener.authSuccessful();
+                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                            DocumentReference docRef = db.collection("users").document();
+
+                                            HashMap<String, Object> data = new HashMap<>();
+                                            data.put("firstName", firstName);
+                                            data.put("lastName", lastName);
+                                            data.put("uid", mAuth.getCurrentUser().getUid());
+                                            data.put("about", "");
+                                            data.put("usersHabits", new ArrayList<String>());
+
+                                            docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        mListener.authSuccessful();
+                                                    }
+                                                    else {
+                                                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }
                                         else {
                                             Toast.makeText(getActivity(), "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
