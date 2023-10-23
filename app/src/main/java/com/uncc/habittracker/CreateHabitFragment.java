@@ -69,7 +69,7 @@ public class CreateHabitFragment extends Fragment {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FirebaseAuth auth = FirebaseAuth.getInstance();
 
-                    DocumentReference docRef = db.collection("userHabits").document();
+                    DocumentReference docRef = db.collection("usersHabits").document();
 
                     HashMap<String, Object> data = new HashMap<>();
                     data.put("createdAt", FieldValue.serverTimestamp());

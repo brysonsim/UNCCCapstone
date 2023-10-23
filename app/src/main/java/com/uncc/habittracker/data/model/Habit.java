@@ -2,13 +2,13 @@ package com.uncc.habittracker.data.model;
 
 import com.google.firebase.Timestamp;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+
 
 public class Habit implements Serializable {
 
     private String frequency, habitTypeID, nameOverride, userId;
     private int progress;
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
     public Habit() {
 
     }
@@ -53,11 +53,11 @@ public class Habit implements Serializable {
         this.progress = progress;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 }

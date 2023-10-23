@@ -51,7 +51,7 @@ public class HabitsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
-        listenerRegistration = db.collection("habits").whereEqualTo("userId", mAuth.getCurrentUser().getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration = db.collection("usersHabits").whereEqualTo("userId", mAuth.getCurrentUser().getUid().toString()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -124,7 +124,7 @@ public class HabitsFragment extends Fragment {
 
             public void setupUI(Habit habit) {
                 this.mHabit = habit;
-                mBinding.textViewHabitName.setText(mHabit.getName());
+                mBinding.textViewHabitName.setText(mHabit.getNameOverride());
             }
         }
     }
