@@ -76,12 +76,6 @@ public class HabitsFragment extends Fragment {
             }
         });
 
-        binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.logout();
-            }
-        });
     }
 
     @Override

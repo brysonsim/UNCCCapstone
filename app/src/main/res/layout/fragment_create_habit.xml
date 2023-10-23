@@ -45,32 +45,50 @@
         android:id="@+id/labelDropDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="98dp"
+        android:layout_marginTop="32dp"
         android:text="What kind of habit is this"
         app:layout_constraintTop_toBottomOf="@+id/editTextHabitName"
-        tools:layout_editor_absoluteX="18dp" />
+        tools:layout_editor_absoluteX="-4dp" />
 
-    <Spinner
-        android:id="@+id/dbHabitType"
-        android:layout_width="373dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+    <RadioGroup
+        android:id="@+id/typeSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:checkedButton="@id/rbStudy"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelDropDown" />
+        app:layout_constraintTop_toBottomOf="@+id/labelDropDown">
+
+        <RadioButton
+            android:id="@+id/rbStudy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Study" />
+
+        <RadioButton
+            android:id="@+id/rbWorkOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Work Out"
+
+            />
+
+        <RadioButton
+            android:id="@+id/rb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RadioButton" />
+    </RadioGroup>
 
     <RadioGroup
         android:id="@+id/freqChooser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="20dp"
         android:checkedButton="@id/rbDaily"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dbHabitType">
+        tools:layout_editor_absoluteY="258dp">
 
         <RadioButton
             android:id="@+id/rbDaily"

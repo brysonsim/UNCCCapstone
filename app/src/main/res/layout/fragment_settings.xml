@@ -13,7 +13,7 @@
         android:text="@string/hello_blank_fragment" />
 
     <Button
-        android:id="@+id/buttonLogout2"
+        android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/logout_label"
