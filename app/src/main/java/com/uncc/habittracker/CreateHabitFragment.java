@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +30,7 @@ public class CreateHabitFragment extends Fragment {
     }
 
     FragmentCreateHabitBinding binding;
+    private Spinner habitType;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCreateHabitBinding.inflate(inflater, container, false);
@@ -39,6 +41,14 @@ public class CreateHabitFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Create Habit");
+
+        //populate the drop down with the habit types
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        DocumentReference docRef = db.collection("habitTypes").document();
+
+
 
         binding.buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,13 +69,17 @@ public class CreateHabitFragment extends Fragment {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FirebaseAuth auth = FirebaseAuth.getInstance();
 
-                    DocumentReference docRef = db.collection("habits").document();
+                    DocumentReference docRef = db.collection("userHabits").document();
 
                     HashMap<String, Object> data = new HashMap<>();
-                    data.put("name", name);
                     data.put("createdAt", FieldValue.serverTimestamp());
-                    data.put("docId", docRef.getId());
+                    data.put("frequency","test");
+                    data.put("habitTypeID", "put id here");
+                    data.put("nameOverride", name);
+                    data.put("progress", 0);
                     data.put("userId", auth.getCurrentUser().getUid());
+
+
 
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
