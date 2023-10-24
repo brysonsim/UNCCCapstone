@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.uncc.habittracker.databinding.FragmentCreateEventsBinding;
 import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
 public class CreateEventsFragment extends Fragment {
@@ -18,18 +19,19 @@ public class CreateEventsFragment extends Fragment {
     public CreateEventsFragment() {
         // Required empty public constructor
     }
-    FragmentCreateHabitBinding binding;
+    FragmentCreateEventsBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        binding = FragmentCreateHabitBinding.inflate(inflater, container, false);
+        binding = FragmentCreateEventsBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Create Event");
     }
 
 
