@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/buttonCreateEvent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EventsFragment">
@@ -10,7 +9,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <Button
-        android:id="@+id/buttonCreateEvent_real"
+        android:id="@+id/buttonCreateEvent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -27,8 +26,17 @@
         android:layout_height="467dp"
         android:layout_marginTop="180dp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/event_row_item"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/event_row_item" />
+
+    <TextView
+        android:id="@+id/textViewEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="31dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
