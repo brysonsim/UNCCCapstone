@@ -76,7 +76,7 @@
             />
 
         <RadioButton
-            android:id="@+id/rb"
+            android:id="@+id/rbLifestyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="RadioButton" />
