@@ -21,6 +21,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/textViewPrimaryPercent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textColor="#6200EE"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewSecondaryPercent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingEnd="5dp"
+            android:text="0%"
+            android:textColor="#03DAC6"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/textViewPrimaryPercent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"

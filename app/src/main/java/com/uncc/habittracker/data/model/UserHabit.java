@@ -6,10 +6,10 @@ import com.google.firebase.Timestamp;
 public class UserHabit implements Serializable {
     public Timestamp createdAt;
     public int progress, progressSecondary;
-    public String frequency, habitTypeId, nameOverride, userId;
+    public String frequency, habitTypeID, nameOverride, userId;
 
     public UserHabit() {
-
+        this.progressSecondary = -1;
     }
 
     public Timestamp getCreatedAt() {
@@ -44,12 +44,12 @@ public class UserHabit implements Serializable {
         this.frequency = frequency;
     }
 
-    public String getHabitTypeId() {
-        return habitTypeId;
+    public String getHabitTypeID() {
+        return habitTypeID;
     }
 
-    public void setHabitTypeId(String habitTypeId) {
-        this.habitTypeId = habitTypeId;
+    public void setHabitTypeID(String habitTypeID) {
+        this.habitTypeID = habitTypeID;
     }
 
     public String getNameOverride() {
