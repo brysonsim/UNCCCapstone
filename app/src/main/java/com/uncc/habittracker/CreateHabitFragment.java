@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,13 +24,15 @@ import java.util.HashMap;
 
 import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
+
 public class CreateHabitFragment extends Fragment {
+    private RadioGroup typeSelect,freqSelect;
+    private String type,freq;
     public CreateHabitFragment() {
         // Required empty public constructor
     }
 
     FragmentCreateHabitBinding binding;
-    private Spinner habitType;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCreateHabitBinding.inflate(inflater, container, false);
@@ -41,6 +43,37 @@ public class CreateHabitFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Create Habit");
+        typeSelect = getView().findViewById(R.id.typeSelector);
+        freqSelect = getView().findViewById(R.id.freqChooser);
+
+        typeSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(R.id.rbStudy == i){
+                    type = "study";
+                }
+                else if(R.id.rbWorkOut == i){
+                    type = "Work Out";
+                }
+                else if(R.id.rbMind == i){
+                    type = "Mindfulness";
+                }
+            }
+        });
+        freqSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if(R.id.rbDaily == i){
+                    freq = "Daily";
+                }
+                else if(R.id.rbWeekly == i){
+                    freq = "Weekly";
+                }
+                else if(R.id.rbMonthly == i){
+                    freq = "Monthly";
+                }
+            }
+        });
 
         //populate the drop down with the habit types
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -73,8 +106,8 @@ public class CreateHabitFragment extends Fragment {
 
                     HashMap<String, Object> data = new HashMap<>();
                     data.put("createdAt", FieldValue.serverTimestamp());
-                    data.put("frequency","test");
-                    data.put("habitTypeID", "put id here");
+                    data.put("frequency",freq);
+                    data.put("habitTypeID", type);
                     data.put("nameOverride", name);
                     data.put("progress", 0);
                     data.put("userId", auth.getCurrentUser().getUid());

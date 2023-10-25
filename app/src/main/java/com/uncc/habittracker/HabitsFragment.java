@@ -122,6 +122,7 @@ public class HabitsFragment extends Fragment {
             public void setupUI(Habit habit) {
                 this.mHabit = habit;
                 mBinding.textViewHabitName.setText(mHabit.getNameOverride());
+                mBinding.textViewHabitType.setText(mHabit.getHabitTypeID());
             }
         }
     }
