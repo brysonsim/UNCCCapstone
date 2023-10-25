@@ -26,7 +26,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0%"
-            android:textColor="#6200EE"
+            android:textColor="@color/purple_500"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:paddingEnd="5dp"
             android:text="0%"
-            android:textColor="#03DAC6"
+            android:textColor="@color/teal_200"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/textViewPrimaryPercent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,27 @@
             android:layout_height="wrap_content"
             android:max="100"
             android:minHeight="50dp"
+            android:progressTint="@color/purple_500"
+            android:progressTintMode="src_over"
             android:scaleY="8"
+            android:secondaryProgressTint="@color/teal_200"
+            android:secondaryProgressTintMode="src_over"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHabitName" />
+
+        <ProgressBar
+            android:id="@+id/progressBarSecondary"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100"
+            android:minHeight="50dp"
+            android:progressTint="@color/teal_200"
+            android:progressTintMode="src_over"
+            android:scaleY="8"
+            android:secondaryProgressTint="@color/purple_500"
+            android:secondaryProgressTintMode="src_over"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewHabitName" />

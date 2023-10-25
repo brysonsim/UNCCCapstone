@@ -1,8 +1,5 @@
 package com.uncc.habittracker;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -232,11 +229,8 @@ public class DashboardFragment extends Fragment {
                             Log.d("UserHabits compare", userHabit.getHabitTypeID());
 
                             Optional<UserHabit> selectedUserHabit = compareToUserHabits.stream()
-                                    .filter(compareToUserHabit -> {
-                                        Log.d("Inside filter block", compareToUserHabit.getHabitTypeID());
-
-                                        return compareToUserHabit.getHabitTypeID().equals(userHabit.getHabitTypeID());
-                                    })
+                                    .filter(compareToUserHabit -> compareToUserHabit.getHabitTypeID().equals(userHabit.getHabitTypeID()))
+                                    .filter(compareToFrequency -> compareToFrequency.getFrequency().equals(userHabit.getFrequency()))
                                     .findFirst();
 
                             if (selectedUserHabit.isPresent()) {
@@ -288,57 +282,53 @@ public class DashboardFragment extends Fragment {
 
                 Log.d("Debug progress", String.valueOf(mUserHabit.getProgress()));
 
-                // Progress 1
                 double habitProgress = (double)mUserHabit.getProgress();
-                double habitProgressPercent = (habitProgress / 7.0) * 100.0;
-                Log.d("Progress Primary", mUserHabit.getHabitTypeID() + ": " + String.valueOf(habitProgress));
+                double habitProgressPercent;
 
-                // Progress 2
                 double habitProgressSecondary = (double)mUserHabit.getProgressSecondary();
+                double habitProgressSecondaryPercent;
+
+                Log.d("Progress Primary", mUserHabit.getHabitTypeID() + ": " + String.valueOf(habitProgress));
                 Log.d("Progress Secondary", mUserHabit.getHabitTypeID() + ": " + String.valueOf(habitProgressSecondary));
 
-                double habitProgressSecondaryPercent = (habitProgressSecondary / 7.0) * 100.0;
-                //double habitProgressSecondaryPercent = 50.0;
+                switch (mUserHabit.getFrequency()) {
+                    case "Daily":
+                        habitProgressPercent = (habitProgress / 7.0) * 100.0;
+                        habitProgressSecondaryPercent = (habitProgressSecondary / 7.0) * 100.0;
+                        break;
+                    default:
+                        habitProgressPercent = habitProgress * 100.0;
+                        habitProgressSecondaryPercent = habitProgressSecondary * 100.0;
+                        break;
+                }
 
-                int colorLoggedInUser = Color.parseColor("#03DAC6");
-                int colorComparedUser = Color.parseColor("#6200EE");
+                if (habitProgressPercent > 100.0) {
+                    habitProgressPercent = 100.0;
+                }
 
-                // Generate a mutated version of the progress bar drawable. If we do not do this,
-                // changing these properties will affect each of the progress bars, not the
-                // individual ones.
-                LayerDrawable progressDrawable = (LayerDrawable)mBinding.progressBar.getProgressDrawable().mutate().getConstantState().newDrawable();
+                if (habitProgressSecondaryPercent > 100.0) {
+                    habitProgressSecondaryPercent = 100.0;
+                }
 
                 if (habitProgressSecondary > 0 && habitProgressSecondaryPercent < habitProgressPercent) {
-                    progressDrawable.setId(0, android.R.id.background);
-
-                    // We need to swap the position of the primary and secondary progress bar layers
-                    // Default is background -> secondaryProgress -> progress
-                    // Doing this ensures the secondary progress bar gets layered on top of the
-                    // primary.
-                    progressDrawable.setId(1, android.R.id.progress);
-                    progressDrawable.setId(2, android.R.id.secondaryProgress);
-
-                    // We also need to force the colors we want to use. Also need to force the tint
-                    // mode to SRC_OVER preventing the applying of any alpha channels.
-                    progressDrawable.findDrawableByLayerId(progressDrawable.getId(2)).setColorFilter(colorLoggedInUser, PorterDuff.Mode.SRC_OVER);
-                    progressDrawable.findDrawableByLayerId(progressDrawable.getId(1)).setColorFilter(colorComparedUser, PorterDuff.Mode.SRC_OVER);
+                    mBinding.progressBar.setVisibility(View.INVISIBLE);
+                    mBinding.progressBarSecondary.setVisibility(View.VISIBLE);
+                    mBinding.progressBarSecondary.setProgress((int)habitProgressSecondaryPercent);
+                    mBinding.progressBarSecondary.setSecondaryProgress((int)habitProgressPercent);
                 }
                 else {
-                    progressDrawable.findDrawableByLayerId(progressDrawable.getId(2)).setColorFilter(colorComparedUser, PorterDuff.Mode.SRC_OVER);
-                    progressDrawable.findDrawableByLayerId(progressDrawable.getId(1)).setColorFilter(colorLoggedInUser, PorterDuff.Mode.SRC_OVER);
+                    mBinding.progressBarSecondary.setVisibility(View.INVISIBLE);
+                    mBinding.progressBar.setVisibility(View.VISIBLE);
+                    mBinding.progressBar.setProgress((int)habitProgressPercent);
+                    mBinding.progressBar.setSecondaryProgress((int)habitProgressSecondaryPercent);
                 }
 
-                // Apply our modified layer drawable to the progress bar
-                mBinding.progressBar.setProgressDrawable(progressDrawable);
-                mBinding.progressBar.setProgress((int)habitProgressPercent);
                 mBinding.textViewPrimaryPercent.setText(String.format("%d%%", (int)habitProgressPercent));
 
                 if (habitProgressSecondary > 0) {
-                    mBinding.progressBar.setSecondaryProgress((int)habitProgressSecondaryPercent);
                     mBinding.textViewSecondaryPercent.setText(String.format("%d%%", (int)habitProgressSecondaryPercent));
                 }
                 else {
-                    mBinding.progressBar.setSecondaryProgress(0);
                     mBinding.textViewSecondaryPercent.setText("");
                 }
             }
