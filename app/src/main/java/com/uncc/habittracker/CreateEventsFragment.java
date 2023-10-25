@@ -26,7 +26,7 @@ import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 import java.util.HashMap;
 
 public class CreateEventsFragment extends Fragment {
-
+ private int test;
 
     public CreateEventsFragment() {
         // Required empty public constructor
