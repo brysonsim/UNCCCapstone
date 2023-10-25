@@ -30,7 +30,8 @@ public class EventsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Events");
         String user = mAuth.getCurrentUser().toString();

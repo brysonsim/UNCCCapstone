@@ -7,9 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,32 +71,47 @@ public class CreateEventsFragment extends Fragment {
                 else if(location.isEmpty()){
                     Toast.makeText(getActivity(), "location cannot be empty", Toast.LENGTH_SHORT).show();
                 }
+                else if(binding.typeSelector.getCheckedRadioButtonId() == -1){
+                    Toast.makeText(getActivity(), "Please select a habit", Toast.LENGTH_SHORT).show();
+                }
                 else{
+                    String TAG = "demo";
+
+
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FirebaseAuth auth = FirebaseAuth.getInstance();
                     DocumentReference docRef = db.collection("events").document();
                     HashMap<String, Object> data = new HashMap<>();
+
+
+                    RadioButton radioButton = (RadioButton) binding.typeSelector.findViewById(binding.typeSelector.getCheckedRadioButtonId());
+                    String habitType = radioButton.getText().toString();
+
+
                     data.put("title", title);
                     data.put("description", desc);
                     data.put("ownerId", auth.getCurrentUser().getUid());
                     data.put("ownerName", auth.getCurrentUser().getDisplayName());
                     data.put("createdAt", FieldValue.serverTimestamp());
                     data.put("docId", docRef.getId());
+                  data.put("HabitType", habitType);
+
+                    Log.d(TAG, auth.getCurrentUser().getDisplayName());
+
 
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
+                                Log.d(TAG, "passed putting data");
                                 mListener.submitEventCreation();
-
                             }
                             else{
+                                Log.d(TAG, "failed putting data");
                             }
                         }
                     });
-
                 }
-
             }
         });
 

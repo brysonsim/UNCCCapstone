@@ -133,16 +133,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     public void createNewEvent() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new CreateEventsFragment())
+                .addToBackStack(null)
                 .commit();
     }
 
     @Override
-    public void cancelEventCreation() {
-
-    }
+    public void cancelEventCreation() {getSupportFragmentManager().popBackStack();    }
 
     @Override
-    public void submitEventCreation() {
-
-    }
+    public void submitEventCreation() {getSupportFragmentManager().popBackStack();}
 }
