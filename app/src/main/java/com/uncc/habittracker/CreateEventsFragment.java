@@ -94,7 +94,7 @@ public class CreateEventsFragment extends Fragment {
                     data.put("ownerName", auth.getCurrentUser().getDisplayName());
                     data.put("createdAt", FieldValue.serverTimestamp());
                     data.put("docId", docRef.getId());
-                  data.put("HabitType", habitType);
+                    data.put("habitType", habitType);
 
                     Log.d(TAG, auth.getCurrentUser().getDisplayName());
 
