@@ -144,21 +144,21 @@ public class EventsFragment extends Fragment {
             }
             public void setupUI(Event event){
                 this.mEvent = event;
-//                mBinding.textViewForumCreatedBy.setText(mEvent.getOwnerName());
-//                mBinding.textViewEventTitle.setText(mEvent.getOwnerName());
-//                mBinding.textViewForumText.setText(mEvent.getOwnerName());
-//
-//                if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
-//                {
-//                    mBinding.imageViewDelete.setVisibility(View.VISIBLE);
-//                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//
-//                        }
-//                    });
-//                }
-//                else{mBinding.imageViewDelete.setVisibility(View.INVISIBLE);}
+                mBinding.textViewForumCreatedBy.setText(mEvent.getOwnerName());
+                mBinding.textViewEventTitle.setText(mEvent.getTitle());
+                mBinding.textViewDescription.setText(mEvent.getDescription());
+
+                if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
+                {
+                    mBinding.imageViewDelete.setVisibility(View.VISIBLE);
+                    mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                }
+                else{mBinding.imageViewDelete.setVisibility(View.INVISIBLE);}
 
             }
         }
