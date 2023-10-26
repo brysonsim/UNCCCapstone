@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 public class User {
     //user fields
-    private String firstName, lastName, uid, about;
+    private String firstName, lastName, uid, about, firebaseUid;
     private ArrayList<Habit> Habits;
 
+    public User() {
+
+    }
     //generated constructor
     public User(String firstName, String lastName, String uid) {
         this.firstName = firstName;
@@ -44,6 +47,14 @@ public class User {
         this.uid = uid;
     }
 
+    public String getFirebaseUid() {
+        return firebaseUid;
+    }
+
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
+    }
+
     public String getAbout() {
         return about;
     }
@@ -60,7 +71,6 @@ public class User {
         Habits = habits;
     }
 
-
-
+    public String getDisplayName() { return firstName + " " + lastName; }
 
 }

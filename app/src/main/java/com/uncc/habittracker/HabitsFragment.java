@@ -52,6 +52,7 @@ public class HabitsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
+        //connect to the user habits store and get documents with the current users ID
         listenerRegistration = db.collection("usersHabits").whereEqualTo("userId", mAuth.getCurrentUser().getUid().toString()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -61,7 +62,7 @@ public class HabitsFragment extends Fragment {
                 }
 
                 mHabits.clear();
-
+                //add the habits to an array list for storing based on the habit class scheme
                 for (QueryDocumentSnapshot doc: value) {
                     Habit habit = doc.toObject(Habit.class);
                     mHabits.add(habit);
@@ -119,9 +120,11 @@ public class HabitsFragment extends Fragment {
                 mBinding = itemBinding;
             }
 
+            //display data in the text holders
             public void setupUI(Habit habit) {
                 this.mHabit = habit;
                 mBinding.textViewHabitName.setText(mHabit.getNameOverride());
+                mBinding.textViewHabitType.setText(mHabit.getHabitTypeID());
             }
         }
     }

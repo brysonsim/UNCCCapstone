@@ -76,21 +76,29 @@
             />
 
         <RadioButton
-            android:id="@+id/rbLifestyle"
+            android:id="@+id/rbMind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="Mindfulness" />
     </RadioGroup>
-
+    <TextView
+        android:id="@+id/labelFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="How often do you want to do this"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
     <RadioGroup
         android:id="@+id/freqChooser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:checkedButton="@id/rbDaily"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSubmit"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeSelector">
+        app:layout_constraintTop_toBottomOf="@+id/labelFreq">
 
         <RadioButton
             android:id="@+id/rbDaily"
@@ -105,7 +113,7 @@
             android:text="Weekly" />
 
         <RadioButton
-            android:id="@+id/rdMonthly"
+            android:id="@+id/rbMonthly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Monthly" />

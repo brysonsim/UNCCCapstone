@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chip xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.Chip.Action"
+    app:closeIcon="@android:drawable/ic_delete"
+    app:closeIconEnabled="true"/>
