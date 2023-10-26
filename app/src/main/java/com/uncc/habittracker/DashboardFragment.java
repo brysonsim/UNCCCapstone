@@ -133,7 +133,7 @@ public class DashboardFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("Debug Get Id", document.getId());
-                                loggedInUserId = document.getId();
+                                loggedInUserId = mAuth.getCurrentUser().getUid();
                                 setupDataListener(loggedInUserId);
                             }
                         }
