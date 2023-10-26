@@ -44,6 +44,8 @@ public class CreateHabitFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Create Habit");
+        type = "Study";
+        freq = "Daily";
         //once the view is created grab the radio groups
         typeSelect = getView().findViewById(R.id.typeSelector);
         freqSelect = getView().findViewById(R.id.freqChooser);
