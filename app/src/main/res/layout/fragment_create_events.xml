@@ -23,7 +23,7 @@
         android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Event Title"
+        android:hint="Event Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +35,7 @@
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:text="Description"
+        android:hint="Description"
         app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
         app:layout_constraintTop_toBottomOf="@+id/editTextEventTitle" />
 
@@ -77,12 +77,12 @@
             android:id="@+id/rbLifestyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lifestyle" />
+            android:text="Mindfulness" />
     </RadioGroup>
 
     <EditText
         android:id="@+id/editTextTextPostalAddress"
-        android:text="Location"
+        android:hint="Location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

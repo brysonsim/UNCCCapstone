@@ -81,7 +81,6 @@ public class EventsFragment extends Fragment {
 
         String user = mAuth.getCurrentUser().toString();
         Log.d("TAG", "The current user is" +user);
-        binding.textViewEvent.setText("information");
         binding.buttonCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,6 +146,8 @@ public class EventsFragment extends Fragment {
                 mBinding.textViewForumCreatedBy.setText(mEvent.getOwnerName());
                 mBinding.textViewEventTitle.setText(mEvent.getTitle());
                 mBinding.textViewDescription.setText(mEvent.getDescription());
+                //needs to change to change the number of attendees
+                mBinding.textViewEventNumerOfAttendees.setText(mEvent.getHabitType());
 
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {
