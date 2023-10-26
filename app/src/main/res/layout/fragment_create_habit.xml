@@ -47,16 +47,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="What kind of habit is this"
-        app:layout_constraintTop_toBottomOf="@+id/editTextHabitName"
-        tools:layout_editor_absoluteX="-4dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextHabitName" />
 
     <RadioGroup
         android:id="@+id/typeSelector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:checkedButton="@id/rbStudy"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelDropDown">
 
@@ -75,20 +76,29 @@
             />
 
         <RadioButton
-            android:id="@+id/rb"
+            android:id="@+id/rbMind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="RadioButton" />
+            android:text="Mindfulness" />
     </RadioGroup>
-
+    <TextView
+        android:id="@+id/labelFreq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="How often do you want to do this"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
     <RadioGroup
         android:id="@+id/freqChooser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
         android:checkedButton="@id/rbDaily"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="258dp">
+        app:layout_constraintTop_toBottomOf="@+id/labelFreq">
 
         <RadioButton
             android:id="@+id/rbDaily"
@@ -103,7 +113,7 @@
             android:text="Weekly" />
 
         <RadioButton
-            android:id="@+id/rdMonthly"
+            android:id="@+id/rbMonthly"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Monthly" />

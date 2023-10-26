@@ -35,7 +35,7 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+//create a new fireauth session
     FragmentSignUpBinding binding;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
@@ -55,26 +55,28 @@ public class SignUpFragment extends Fragment {
             }
         });
         binding.buttonSignup.setOnClickListener(new View.OnClickListener() {
+            //if the user is signing up grab their data
             @Override
             public void onClick(View v) {
                 String firstName = binding.editTextFirstName.getText().toString();
                 String lastName = binding.editTextLastName.getText().toString();
                 String email = binding.editTextEmail.getText().toString();
                 String password = binding.editTextPassword.getText().toString();
-
+                //stop the user if the data is empty, or if the email is not a uncc or charlotte email
                 if (firstName.isEmpty()) {
                     Toast.makeText(getActivity(), "Enter valid first name!", Toast.LENGTH_SHORT).show();
                 }
                 if (lastName.isEmpty()) {
                     Toast.makeText(getActivity(), "Enter valid last name!", Toast.LENGTH_SHORT).show();
                 }
-                else if(email.isEmpty() && (email.matches("[A-Za-z0-9]+@uncc\\.edu") || email.matches("[A-Za-z0-9]+@charlotte\\.edu"))) {
+                else if(email.isEmpty() || !(email.matches("[A-Za-z0-9]+@uncc\\.edu") || email.matches("[A-Za-z0-9]+@charlotte\\.edu"))) {
                     Toast.makeText(getActivity(), "Enter valid email!", Toast.LENGTH_SHORT).show();
                 }
                 else if (password.isEmpty()) {
                     Toast.makeText(getActivity(), "Enter valid password!", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //create the user on the authentication side
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -83,7 +85,7 @@ public class SignUpFragment extends Fragment {
                                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(firstName + " " + lastName)
                                         .build();
-
+    //push the users profile to the user collection
                                 mAuth.getCurrentUser().updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -104,6 +106,7 @@ public class SignUpFragment extends Fragment {
                                                     if (task.isSuccessful()) {
                                                         mListener.authSuccessful();
                                                     }
+                                                    //notifications for the users if  there was an error
                                                     else {
                                                         Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                                     }
