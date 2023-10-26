@@ -26,6 +26,7 @@ import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
 
 public class CreateHabitFragment extends Fragment {
+    //private fields to use to grab data from the fields
     private RadioGroup typeSelect,freqSelect;
     private String type,freq;
     public CreateHabitFragment() {
@@ -43,9 +44,11 @@ public class CreateHabitFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Create Habit");
+        //once the view is created grab the radio groups
         typeSelect = getView().findViewById(R.id.typeSelector);
         freqSelect = getView().findViewById(R.id.freqChooser);
 
+        //if the type of activity is changed update the value at the top level
         typeSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -60,6 +63,7 @@ public class CreateHabitFragment extends Fragment {
                 }
             }
         });
+        //if the frequency is changed update at the top level
         freqSelect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -75,7 +79,8 @@ public class CreateHabitFragment extends Fragment {
             }
         });
 
-        //populate the drop down with the habit types
+        //connect to the database and select the collection to populate the drop down
+        //THIS SECTION IS NOT USED CURRENTLY
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -89,16 +94,19 @@ public class CreateHabitFragment extends Fragment {
                 mListener.cancelCreateHabit();
             }
         });
-
+        //the submit button
         binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //grab the name of the habit from the text box
                 String name = binding.editTextHabitName.getText().toString();
 
                 if (name.isEmpty()) {
+                    //if the name is empty stop the user from creating the habit
                     Toast.makeText(getActivity(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //connect to the user habit collection to store their data
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     FirebaseAuth auth = FirebaseAuth.getInstance();
 
@@ -113,7 +121,7 @@ public class CreateHabitFragment extends Fragment {
                     data.put("userId", auth.getCurrentUser().getUid());
 
 
-
+                    //push hashmap to firebase
                     docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
