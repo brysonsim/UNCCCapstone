@@ -1,5 +1,6 @@
 package com.uncc.habittracker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,12 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
+        binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sListener.logout();
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -30,4 +37,15 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Settings");
     }
+    SettingsListener sListener;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        sListener = (SettingsFragment.SettingsListener) context;
+    }
+
+    interface SettingsListener {
+        void logout();
+    }
+
 }

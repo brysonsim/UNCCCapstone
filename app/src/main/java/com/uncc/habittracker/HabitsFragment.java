@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,8 @@ public class HabitsFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
-        listenerRegistration = db.collection("habits").whereEqualTo("userId", mAuth.getCurrentUser().getUid()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        //connect to the user habits store and get documents with the current users ID
+        listenerRegistration = db.collection("usersHabits").whereEqualTo("userId", mAuth.getCurrentUser().getUid().toString()).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -60,7 +62,7 @@ public class HabitsFragment extends Fragment {
                 }
 
                 mHabits.clear();
-
+                //add the habits to an array list for storing based on the habit class scheme
                 for (QueryDocumentSnapshot doc: value) {
                     Habit habit = doc.toObject(Habit.class);
                     mHabits.add(habit);
@@ -72,16 +74,12 @@ public class HabitsFragment extends Fragment {
         binding.buttonCreateHabit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.d("TAG", "creating new habit ");
                 mListener.createNewHabit();
             }
         });
 
-        binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.logout();
-            }
-        });
     }
 
     @Override
@@ -122,9 +120,11 @@ public class HabitsFragment extends Fragment {
                 mBinding = itemBinding;
             }
 
+            //display data in the text holders
             public void setupUI(Habit habit) {
                 this.mHabit = habit;
-                mBinding.textViewHabitName.setText(mHabit.getName());
+                mBinding.textViewHabitName.setText(mHabit.getNameOverride());
+                mBinding.textViewHabitType.setText(mHabit.getHabitTypeID());
             }
         }
     }

@@ -3,36 +3,38 @@ package com.uncc.habittracker.data.model;
 import com.google.firebase.Timestamp;
 import java.io.Serializable;
 
-public class Habit implements Serializable {
-    public Timestamp createdAt;
-    public String name, docId, userId;
 
+public class Habit implements Serializable {
+
+    private String frequency, habitTypeID, nameOverride, userId;
+    private int progress;
+    private Timestamp createdAt;
     public Habit() {
 
     }
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
+    public String getFrequency() {
+        return frequency;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
     }
 
-    public String getName() {
-        return name;
+    public String getHabitTypeID() {
+        return habitTypeID;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setHabitTypeID(String habitTypeID) {
+        this.habitTypeID = habitTypeID;
     }
 
-    public String getDocId() {
-        return docId;
+    public String getNameOverride() {
+        return nameOverride;
     }
 
-    public void setDocId(String docId) {
-        this.docId = docId;
+    public void setNameOverride(String nameOverride) {
+        this.nameOverride = nameOverride;
     }
 
     public String getUserId() {
@@ -41,5 +43,21 @@ public class Habit implements Serializable {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 }
