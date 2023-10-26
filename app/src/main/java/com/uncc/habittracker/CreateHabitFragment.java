@@ -53,7 +53,7 @@ public class CreateHabitFragment extends Fragment {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if(R.id.rbStudy == i){
-                    type = "study";
+                    type = "Study";
                 }
                 else if(R.id.rbWorkOut == i){
                     type = "Work Out";
