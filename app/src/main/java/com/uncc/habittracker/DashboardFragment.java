@@ -100,7 +100,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        binding.autoCompleteCompareToTextView.setInputType(InputType.TYPE_NULL);
+        binding.autoCompleteCompareToTextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // Set adapter of our AutoCompleteTextView to the AdapterArray we configured.
         binding.autoCompleteCompareToTextView.setAdapter(autoCompleteAdapterArray);
