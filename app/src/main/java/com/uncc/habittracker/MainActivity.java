@@ -9,6 +9,7 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.uncc.habittracker.data.model.Event;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
         HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener {
@@ -142,4 +143,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
     @Override
     public void submitEventCreation() {getSupportFragmentManager().popBackStack();}
+
+    @Override
+    public void viewEvent(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ViewEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+    }
 }
