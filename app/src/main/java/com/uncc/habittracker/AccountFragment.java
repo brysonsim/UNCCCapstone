@@ -11,48 +11,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.uncc.habittracker.databinding.FragmentHabitsBinding;
 import com.uncc.habittracker.databinding.FragmentSettingsBinding;
+import com.uncc.habittracker.databinding.FragmentUserAccountBinding;
 
-public class SettingsFragment extends Fragment {
-    FragmentSettingsBinding binding;
+public class AccountFragment extends Fragment {
+    FragmentUserAccountBinding binding;
 
-    public SettingsFragment() {
+    public AccountFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentSettingsBinding.inflate(inflater, container, false);
-        binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sListener.logout();
-            }
-        });
-
-        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sListener.account();
-            }
-        });
-
+        binding = FragmentUserAccountBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Settings");
+        getActivity().setTitle("Account");
     }
-    SettingsListener sListener;
+    //AccountListener aListener;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        sListener = (SettingsFragment.SettingsListener) context;
+        //sListener = (SettingsFragment.SettingsListener) context;
     }
 
-    interface SettingsListener {
-        void logout();
-        void account();
-    }
 }
 
