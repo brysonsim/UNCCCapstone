@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
             selectedFragment = new DashboardFragment();
         }
         else if (itemId == R.id.following) {
-            selectedFragment = new FollowingFragment();
+            selectedFragment = new DiscoveryFragment();
         }
         else if (itemId == R.id.habits) {
             selectedFragment = new HabitsFragment();
