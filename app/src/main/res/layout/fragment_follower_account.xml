@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@+id/followerProgress"
         app:layout_constraintEnd_toStartOf="@+id/followButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/fimageView" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -32,7 +32,7 @@
         tools:listitem="@layout/habit_row_item" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/fimageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -80,7 +80,7 @@
         android:id="@+id/followerAbout"
         android:layout_width="199dp"
         android:layout_height="127dp"
-        android:text="TextView"
+        android:text="Write your discription"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +93,7 @@
         android:id="@+id/followButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="edit"
+        android:text="Follow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.894"
@@ -105,7 +105,7 @@
         android:id="@+id/followerProgress"
         android:layout_width="103dp"
         android:layout_height="31dp"
-        android:text="following"
+        android:text="Progress"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,9 +115,10 @@
         app:layout_constraintVertical_bias="0.453" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/followerProgressBars"
         android:layout_width="409dp"
         android:layout_height="381dp"
         app:layout_constraintTop_toBottomOf="@id/followerProgress"
-        tools:listitem="@layout/following_row_item"/>
+        tools:listitem="@layout/following_row_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
