@@ -1,10 +1,13 @@
 package com.uncc.habittracker.data.model;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 public class Event {
-    public com.google.firebase.Timestamp createdAt;
+    public Timestamp createdAt, time;
     public String description, docId, habitType, ownerId, ownerName, title;
+
+    public GeoPoint location;
 
     public Event() {
     }
@@ -15,6 +18,14 @@ public class Event {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 
     public String getHabitType() {
@@ -63,7 +74,14 @@ public class Event {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
 
+    public GeoPoint getLocation() {
+        return location;
+    }
+
+    public void setLocation(GeoPoint location) {
+        this.location = location;
     }
 
     @Override
