@@ -82,15 +82,15 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
 
-                                if (user.getIsVerified()) {
-                                    binding.verifiedUserImageView.setVisibility(View.VISIBLE);
-                                    binding.verifiedUserTextView.setVisibility(View.VISIBLE);
-                                }
+                                //if (user.getIsVerified()) {
+                                //    binding.verifiedUserImageView.setVisibility(View.VISIBLE);
+                                //    binding.verifiedUserTextView.setVisibility(View.VISIBLE);
+                                //}
 
                                 // Create a storage reference from our app
                                 StorageReference storageRef = storage.getReference();
 
-                                StorageReference profileImageRef = storageRef.child("/profile_photos/" + user.getProfilePhoto());
+                                StorageReference profileImageRef = storageRef.child("/profile_photos/" /*+ user.getProfilePhoto()*/);
 
                                 profileImageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
