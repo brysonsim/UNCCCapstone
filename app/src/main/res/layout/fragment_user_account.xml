@@ -8,17 +8,18 @@
     android:background="#F8F8F8">
 
     <TextView
-        android:id="@+id/followerNum"
+        android:id="@+id/userFollowerNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="150dp"
-        android:layout_marginBottom="16dp"
         android:text="Followers: 0"
-        app:layout_constraintBottom_toTopOf="@+id/followerProgress"
-        app:layout_constraintEnd_toStartOf="@+id/followButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.156"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.355" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -32,7 +33,7 @@
         tools:listitem="@layout/habit_row_item" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/userImg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -45,7 +46,7 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/followerAboutTxt"
+        android:id="@+id/UserAboutTxt"
         android:layout_width="197dp"
         android:layout_height="41dp"
         android:text="About"
@@ -53,12 +54,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.339"
-        app:layout_constraintStart_toEndOf="@+id/followerNametxt"
+        app:layout_constraintStart_toEndOf="@+id/userNametxt"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.081" />
 
     <TextView
-        android:id="@+id/followerNametxt"
+        android:id="@+id/userNametxt"
         android:layout_width="130dp"
         android:layout_height="40dp"
         android:text="User's Name"
@@ -77,7 +78,7 @@
         app:barrierDirection="top" />
 
     <TextView
-        android:id="@+id/followerAbout"
+        android:id="@+id/userAbout"
         android:layout_width="199dp"
         android:layout_height="127dp"
         android:text="TextView"
@@ -90,7 +91,7 @@
         app:layout_constraintVertical_bias="0.201" />
 
     <Button
-        android:id="@+id/followButton"
+        android:id="@+id/userEditButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="edit"
@@ -102,7 +103,7 @@
         app:layout_constraintVertical_bias="0.385" />
 
     <TextView
-        android:id="@+id/followerProgress"
+        android:id="@+id/userFollowingTxt"
         android:layout_width="103dp"
         android:layout_height="31dp"
         android:text="following"
@@ -115,9 +116,10 @@
         app:layout_constraintVertical_bias="0.453" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userFollowers"
         android:layout_width="409dp"
         android:layout_height="381dp"
-        app:layout_constraintTop_toBottomOf="@id/followerProgress"
-        tools:listitem="@layout/following_row_item"/>
+        app:layout_constraintTop_toBottomOf="@id/userFollowingTxt"
+        tools:listitem="@layout/following_row_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,7 +11,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +115,14 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
+
+    @Override
+    public void editAccount() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EditAccount())
+                .addToBackStack(null)
+                .commit();
+    }
 
     @Override
     public void logout() {
