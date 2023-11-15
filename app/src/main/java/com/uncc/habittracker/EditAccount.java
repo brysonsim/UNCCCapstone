@@ -23,10 +23,16 @@ public class EditAccount extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEditUserBinding.inflate(inflater, container, false);
+
+        binding.editDone.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                eListener.account();
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -36,7 +42,16 @@ public class EditAccount extends Fragment {
         getActivity().setTitle("Account");
     }
 
+    EditListener eListener;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        eListener = (EditAccount.EditListener) context;
+    }
 
+    interface EditListener {
+        void account();
+    }
 
 
 }

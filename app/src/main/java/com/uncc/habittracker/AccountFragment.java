@@ -63,7 +63,7 @@ public class AccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("Debug Get Id", document.getId());
-                                TextView userName = getView().findViewById(R.id.usernameNametxt);
+                                TextView userName = getView().findViewById(R.id.userNametxt);
                                 TextView aboutSection = getView().findViewById(R.id.aboutTxt);
                                 userName.setText(document.getString("firstName") + " " + document.getString("lastName"));
 
@@ -87,6 +87,10 @@ public class AccountFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         aListener = (AccountFragment.AccountListener) context;
+    }
+
+    interface AccountListener {
+        void editAccount();
     }
 
 }
