@@ -89,7 +89,7 @@ public class AccountFragment extends Fragment {
         aListener = (AccountFragment.AccountListener) context;
     }
 
-    interface AccountListener {
+    interface AccountListener{
         void editAccount();
     }
 
