@@ -98,6 +98,7 @@ public class SignUpFragment extends Fragment {
                                             data.put("lastName", lastName);
                                             data.put("uid", mAuth.getCurrentUser().getUid());
                                             data.put("about", "");
+                                            data.put("isVerified",false);
                                             data.put("usersHabits", new ArrayList<String>());
 
                                             docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
