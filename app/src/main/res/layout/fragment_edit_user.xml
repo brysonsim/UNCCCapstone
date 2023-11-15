@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.154" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -45,7 +45,7 @@
         app:layout_constraintVertical_bias="0.075" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/editLastName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -71,7 +71,7 @@
         app:layout_constraintVertical_bias="0.28" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/editAbout"
         android:layout_width="368dp"
         android:layout_height="163dp"
         android:ems="10"

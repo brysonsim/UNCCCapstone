@@ -31,6 +31,8 @@ public class AccountFragment extends Fragment {
     AccountFragment.AccountListener mListener;
     //AccountFragment.AccountAdapter adapter;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     public AccountFragment() {
         // Required empty public constructor
@@ -39,21 +41,8 @@ public class AccountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentUserAccountBinding.inflate(inflater, container, false);
-        binding.userEditButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                aListener.editAccount();
-            }
-        });
-        return binding.getRoot();
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Account");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         db.collection("users")
                 .whereEqualTo("uid", auth.getCurrentUser().getUid())
                 .get()
@@ -68,7 +57,7 @@ public class AccountFragment extends Fragment {
                                 userName.setText(document.getString("firstName") + " " + document.getString("lastName"));
 
 
-                                if(document.getString("about") == "" || document.getString("firstName") == null){
+                                if(document.getString("about") == "" || document.getString("about") == null){
                                     aboutSection.setText("Head to edit to fill out\nyour Bio!");
                                 }else{
                                     aboutSection.setText(document.getString("about"));
@@ -80,6 +69,18 @@ public class AccountFragment extends Fragment {
                 });
 
 
+        binding.userEditButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                aListener.editAccount();
+            }
+        });
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Account");
 
     }
     AccountListener aListener;
