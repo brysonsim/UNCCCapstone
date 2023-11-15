@@ -35,13 +35,18 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Settings");
     }
     SettingsListener sListener;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         sListener = (SettingsFragment.SettingsListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Settings");
     }
 
     interface SettingsListener {

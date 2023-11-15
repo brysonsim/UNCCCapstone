@@ -43,7 +43,6 @@ public class CreateHabitFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Create Habit");
         type = "Study";
         freq = "Daily";
         //once the view is created grab the radio groups
@@ -146,6 +145,12 @@ public class CreateHabitFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (CreateHabitListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Create Habit");
     }
 
     interface CreateHabitListener{

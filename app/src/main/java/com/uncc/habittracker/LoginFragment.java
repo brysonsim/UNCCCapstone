@@ -76,8 +76,6 @@ public class LoginFragment extends Fragment {
                 mListener.createNewAccount();
             }
         });
-
-        getActivity().setTitle(R.string.login_label);
     }
 
     LoginListener mListener;
@@ -92,6 +90,12 @@ public class LoginFragment extends Fragment {
         else {
             throw new RuntimeException(context.toString() + " must implement LoginListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.login_label);
     }
 
     interface LoginListener {
