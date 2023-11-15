@@ -77,11 +77,10 @@
         app:barrierDirection="top" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/aboutTxt"
         android:layout_width="199dp"
         android:layout_height="127dp"
         android:text="TextView"
-        android:background="@drawable/rounded_corner_view"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
