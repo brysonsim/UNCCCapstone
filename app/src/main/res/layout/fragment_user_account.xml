@@ -78,7 +78,7 @@
         app:barrierDirection="top" />
 
     <TextView
-        android:id="@+id/userAbout"
+        android:id="@+id/aboutTxt"
         android:layout_width="199dp"
         android:layout_height="127dp"
         android:text="TextView"
