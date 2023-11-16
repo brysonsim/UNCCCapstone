@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.uncc.habittracker.data.model.Event;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, UpdatePasswordFragment.UpdatePassword {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -166,5 +166,17 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .replace(R.id.rootView, new ViewEventFragment(event))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void logoutUpdatePass() {
+        FirebaseAuth.getInstance().signOut();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new LoginFragment())
+                .commit();
+
+        // Since we are signing out set bottom navigation to invisible
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.INVISIBLE);
     }
 }

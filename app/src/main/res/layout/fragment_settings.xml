@@ -32,23 +32,13 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/buttonUpdateEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Update Email"
-        app:layout_constraintEnd_toEndOf="@+id/buttonAccount"
-        app:layout_constraintStart_toStartOf="@+id/buttonAccount"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAccount" />
-
-    <Button
         android:id="@+id/buttonUpdatePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Update Password"
-        app:layout_constraintEnd_toEndOf="@+id/buttonUpdateEmail"
-        app:layout_constraintStart_toStartOf="@+id/buttonUpdateEmail"
-        app:layout_constraintTop_toBottomOf="@+id/buttonUpdateEmail" />
+        app:layout_constraintEnd_toEndOf="@+id/buttonAccount"
+        app:layout_constraintStart_toStartOf="@+id/buttonAccount"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

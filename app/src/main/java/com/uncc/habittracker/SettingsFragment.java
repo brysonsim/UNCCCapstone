@@ -21,7 +21,8 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -29,12 +30,12 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        binding.buttonUpdateEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sListener.updateEmail();
-            }
-        });
+//        binding.buttonUpdateEmail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sListener.updateEmail();
+//            }
+//        });
 
         binding.buttonUpdatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
