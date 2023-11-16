@@ -52,7 +52,6 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Events") ;
 
         binding.recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new EventsAdapter(this.mListener, getActivity());
@@ -98,6 +97,12 @@ public class EventsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (EventsListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Events");
     }
 
     interface EventsListener

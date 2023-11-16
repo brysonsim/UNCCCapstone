@@ -63,7 +63,6 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        requireActivity().setTitle("View Event");
 
         binding.eventTitleTextView.setText(event.getTitle());
         binding.valueHostTextView.setText(event.getOwnerName());
@@ -145,6 +144,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         mapView.onResume();
         super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("View Events");
     }
 
     @Override

@@ -47,7 +47,6 @@ public class CreateEventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Create Event");
 
         binding.buttonCancelEventCreation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +129,12 @@ public class CreateEventsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (CreateEventListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Create Event");
     }
 
     interface CreateEventListener

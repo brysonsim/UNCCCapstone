@@ -30,6 +30,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
 //        binding.buttonUpdateEmail.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -41,6 +42,11 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 sListener.updatePassword();
+
+        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sListener.account();
+
             }
         });
 
@@ -50,7 +56,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Settings");
     }
     SettingsListener sListener;
     @Override
@@ -59,10 +64,17 @@ public class SettingsFragment extends Fragment {
         sListener = (SettingsFragment.SettingsListener) context;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Settings");
+    }
+
     interface SettingsListener {
         void logout();
         void updateEmail();
         void updatePassword();
+        void account();
     }
-
 }
+
