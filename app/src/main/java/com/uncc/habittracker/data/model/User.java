@@ -10,11 +10,18 @@ import java.util.ArrayList;
 
 public class User {
     //user fields
-    private String firstName, lastName, uid, about, firebaseUid;
+    private String firstName;
+    private String lastName;
+    private String uid;
+    private String about;
+    private String firebaseUid;
 
 
 
-    private boolean isVerified;
+    private String verified;
+
+
+
     private ArrayList<Habit> Habits;
 
     public User() {
@@ -76,12 +83,12 @@ public class User {
     }
 
     public String getDisplayName() { return firstName + " " + lastName; }
-
-    public boolean isVerified() {
-        return isVerified;
+    public String getVerified() {
+        return verified;
     }
 
-    public void setVerified(boolean verified) {
-        isVerified = verified;
+    public void setVerified(String verified) {
+        this.verified = verified;
     }
+
 }
