@@ -70,7 +70,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Dashboard");
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new DashboardFragment.DashboardAdapter();
@@ -100,7 +99,7 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        binding.autoCompleteCompareToTextView.setInputType(InputType.TYPE_NULL);
+        binding.autoCompleteCompareToTextView.setInputType(InputType.TYPE_CLASS_TEXT);
 
         // Set adapter of our AutoCompleteTextView to the AdapterArray we configured.
         binding.autoCompleteCompareToTextView.setAdapter(autoCompleteAdapterArray);
@@ -170,6 +169,12 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         destroyListenerRegistration();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Dashboard");
     }
 
     private void destroyListenerRegistration() {

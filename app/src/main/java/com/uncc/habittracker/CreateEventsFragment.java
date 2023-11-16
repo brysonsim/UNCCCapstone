@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.uncc.habittracker.databinding.FragmentCreateEventsBinding;
 import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
@@ -46,7 +47,6 @@ public class CreateEventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Create Event");
 
         binding.buttonCancelEventCreation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +86,8 @@ public class CreateEventsFragment extends Fragment {
 
                     RadioButton radioButton = (RadioButton) binding.typeSelector.findViewById(binding.typeSelector.getCheckedRadioButtonId());
                     String habitType = radioButton.getText().toString();
+                    GeoPoint gp = new GeoPoint(0 , 0);
+                    data.put("location", gp);
 
 
                     data.put("title", title);
@@ -93,8 +95,10 @@ public class CreateEventsFragment extends Fragment {
                     data.put("ownerId", auth.getCurrentUser().getUid());
                     data.put("ownerName", auth.getCurrentUser().getDisplayName());
                     data.put("createdAt", FieldValue.serverTimestamp());
+                    data.put("time", FieldValue.serverTimestamp());
                     data.put("docId", docRef.getId());
                     data.put("habitType", habitType);
+                    data.put("location", gp);
 
                     Log.d(TAG, auth.getCurrentUser().getDisplayName());
 
@@ -125,6 +129,12 @@ public class CreateEventsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (CreateEventListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Create Event");
     }
 
     interface CreateEventListener

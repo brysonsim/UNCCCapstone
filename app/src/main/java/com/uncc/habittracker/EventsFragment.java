@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
@@ -50,10 +52,9 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Events") ;
 
         binding.recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new EventsAdapter();
+        adapter = new EventsAdapter(this.mListener, getActivity());
         binding.recyclerViewEvents.setAdapter(adapter);
 
         listenerRegistration = FirebaseFirestore.getInstance().collection("events").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -98,9 +99,17 @@ public class EventsFragment extends Fragment {
         mListener = (EventsListener) context;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Events");
+    }
+
     interface EventsListener
     {
         void createNewEvent();
+
+        void viewEvent(Event event);
     }
 
     @Override
@@ -115,11 +124,20 @@ public class EventsFragment extends Fragment {
 
     class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder>
     {
+        EventsListener listener;
+
+        private Context context;
+        public EventsAdapter(EventsListener listener, Context context)
+        {
+            super();
+            this.listener = listener;
+            this.context = context;
+        }
         @NonNull
         @Override
         public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             EventRowItemBinding itemBinding = EventRowItemBinding.inflate(getLayoutInflater(), parent, false);
-            return new EventsViewHolder(itemBinding);
+            return new EventsViewHolder(itemBinding, listener);
         }
 
         @Override
@@ -137,9 +155,12 @@ public class EventsFragment extends Fragment {
             {
             EventRowItemBinding mBinding;
             Event mEvent;
-            public EventsViewHolder(EventRowItemBinding itemBinding) {
+            EventsListener listener;
+
+            public EventsViewHolder(EventRowItemBinding itemBinding, EventsListener listener) {
                 super(itemBinding.getRoot());
                 mBinding = itemBinding;
+                this.listener = listener;
             }
             public void setupUI(Event event){
                 this.mEvent = event;
@@ -160,6 +181,13 @@ public class EventsFragment extends Fragment {
                     });
                 }
                 else{mBinding.imageViewDelete.setVisibility(View.INVISIBLE);}
+
+                mBinding.cardViewEvent.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        listener.viewEvent(mEvent);
+                    }
+                });
 
             }
         }
