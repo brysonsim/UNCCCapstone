@@ -12,6 +12,7 @@ public class User {
     //user fields
     private String firstName, lastName, uid, about, firebaseUid;
     private ArrayList<Habit> Habits;
+    private ArrayList<User> following;
 
     public User() {
 
