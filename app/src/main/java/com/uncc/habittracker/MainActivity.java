@@ -15,9 +15,12 @@ import com.uncc.habittracker.data.model.Event;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
 
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener {
+
+
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword {
 
         private Menu menuList;
+
 
 
     @Override
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
             selectedFragment = new DashboardFragment();
         }
         else if (itemId == R.id.following) {
-            selectedFragment = new FollowingFragment();
+            selectedFragment = new DiscoveryFragment();
         }
         else if (itemId == R.id.habits) {
             selectedFragment = new HabitsFragment();
@@ -212,6 +215,22 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     @Override
+    public void updateEmail() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new UpdateEmailFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void updatePassword() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new UpdatePasswordFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void cancelCreateHabit() {
         getSupportFragmentManager().popBackStack();
     }
@@ -241,5 +260,17 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .replace(R.id.rootView, new ViewEventFragment(event))
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void logoutUpdatePass() {
+        FirebaseAuth.getInstance().signOut();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new LoginFragment())
+                .commit();
+
+        // Since we are signing out set bottom navigation to invisible
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setVisibility(View.INVISIBLE);
     }
 }

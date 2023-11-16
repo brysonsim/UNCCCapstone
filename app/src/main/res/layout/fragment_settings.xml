@@ -22,6 +22,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/logout_label"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,13 +30,22 @@
         android:id="@+id/buttonAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="@string/account_label"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.118"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogout"
         tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/buttonUpdatePassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Update Password"
+        app:layout_constraintEnd_toEndOf="@+id/buttonAccount"
+        app:layout_constraintStart_toStartOf="@+id/buttonAccount"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAccount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
