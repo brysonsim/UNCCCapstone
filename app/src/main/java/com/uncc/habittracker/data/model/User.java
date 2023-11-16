@@ -9,19 +9,44 @@ import java.util.ArrayList;
  */
 
 public class User {
+
+
     //user fields
-    private String firstName, lastName, uid, about, firebaseUid;
+    private String firstName, lastName, uid, about, firebaseUid, verified;
+    private Boolean admin;
     private ArrayList<Habit> Habits;
+
+    public User(String firstName, String lastName, String uid, String about, String firebaseUid, String verified, Boolean admin, ArrayList<Habit> habits) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.uid = uid;
+        this.about = about;
+        this.firebaseUid = firebaseUid;
+        this.verified = verified;
+        this.admin = admin;
+        Habits = habits;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
+    }
+
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
 
     public User() {
 
     }
-    //generated constructor
-    public User(String firstName, String lastName, String uid) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.uid = uid;
-    }
+
 
     public String getFirstName() {
         return firstName;
@@ -73,4 +98,17 @@ public class User {
 
     public String getDisplayName() { return firstName + " " + lastName; }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", uid='" + uid + '\'' +
+                ", about='" + about + '\'' +
+                ", firebaseUid='" + firebaseUid + '\'' +
+                ", verified='" + verified + '\'' +
+                ", admin=" + admin +
+                ", Habits=" + Habits +
+                '}';
+    }
 }

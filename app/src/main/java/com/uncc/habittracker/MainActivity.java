@@ -9,9 +9,10 @@ import android.view.View;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.uncc.habittracker.data.model.Event;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +121,19 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     @Override
+    public void errorState() {
+        login();
+    }
+
+    @Override
+    public void openAdminApproval() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ApproveVerification())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void cancelCreateHabit() {
         getSupportFragmentManager().popBackStack();
     }
@@ -137,9 +151,46 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
+
+
     @Override
     public void cancelEventCreation() {getSupportFragmentManager().popBackStack();    }
 
     @Override
     public void submitEventCreation() {getSupportFragmentManager().popBackStack();}
+
+    @Override
+    public void viewEvent(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ViewEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void editEvent(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EditEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goBackToHome() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void cancelEdit() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void afterEditOpen(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ViewEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+
+    }
 }

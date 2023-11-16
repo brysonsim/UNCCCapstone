@@ -1,11 +1,14 @@
 package com.uncc.habittracker;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,8 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -53,7 +60,7 @@ public class EventsFragment extends Fragment {
         getActivity().setTitle("Events") ;
 
         binding.recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new EventsAdapter();
+        adapter = new EventsAdapter(this.mListener, getActivity());
         binding.recyclerViewEvents.setAdapter(adapter);
 
         listenerRegistration = FirebaseFirestore.getInstance().collection("events").addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -101,6 +108,8 @@ public class EventsFragment extends Fragment {
     interface EventsListener
     {
         void createNewEvent();
+        void editEvent(Event event);
+        void viewEvent(Event event);
     }
 
     @Override
@@ -115,11 +124,20 @@ public class EventsFragment extends Fragment {
 
     class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.EventsViewHolder>
     {
+        EventsListener listener;
+
+        private Context context;
+        public EventsAdapter(EventsListener listener, Context context)
+        {
+            super();
+            this.listener = listener;
+            this.context = context;
+        }
         @NonNull
         @Override
         public EventsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             EventRowItemBinding itemBinding = EventRowItemBinding.inflate(getLayoutInflater(), parent, false);
-            return new EventsViewHolder(itemBinding);
+            return new EventsViewHolder(itemBinding, listener);
         }
 
         @Override
@@ -137,9 +155,12 @@ public class EventsFragment extends Fragment {
             {
             EventRowItemBinding mBinding;
             Event mEvent;
-            public EventsViewHolder(EventRowItemBinding itemBinding) {
+            EventsListener listener;
+
+            public EventsViewHolder(EventRowItemBinding itemBinding, EventsListener listener) {
                 super(itemBinding.getRoot());
                 mBinding = itemBinding;
+                this.listener = listener;
             }
             public void setupUI(Event event){
                 this.mEvent = event;
@@ -151,15 +172,68 @@ public class EventsFragment extends Fragment {
 
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {
+                    mBinding.imageViewEdit.setVisibility(View.VISIBLE);
                     mBinding.imageViewDelete.setVisibility(View.VISIBLE);
+
                     mBinding.imageViewDelete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setMessage("Are you sure you want to delete this Event ?");
+
+                            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User confirmed, perform the delete operation
+                                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                                    DocumentReference docRef = db.collection("events").document(mEvent.getDocId());
+
+                                    docRef.delete().addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(getContext(), "Error : Event Not Deleted !", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+                    });
+
+                    mBinding.imageViewEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mListener.editEvent(mEvent);
                         }
                     });
                 }
-                else{mBinding.imageViewDelete.setVisibility(View.INVISIBLE);}
+                else{
+                    mBinding.imageViewEdit.setVisibility(View.INVISIBLE);
+                    mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
+                }
+
+                mBinding.cardViewEvent.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        listener.viewEvent(mEvent);
+                    }
+                });
 
             }
         }
