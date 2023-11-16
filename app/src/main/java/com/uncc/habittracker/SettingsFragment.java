@@ -43,13 +43,14 @@ public class SettingsFragment extends Fragment {
             public void onClick(View view) {
                 sListener.updatePassword();
 
-        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sListener.account();
+                binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        sListener.account();
 
+                    }
+                });
             }
         });
-
         return binding.getRoot();
     }
 
