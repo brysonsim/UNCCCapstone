@@ -16,6 +16,7 @@ public class User {
 
     private boolean isVerified;
     private ArrayList<Habit> Habits;
+    private ArrayList<User> following;
 
     public User() {
 
