@@ -38,17 +38,18 @@ public class SettingsFragment extends Fragment {
 //            }
 //        });
 
+        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sListener.account();
+
+            }
+        });
+
         binding.buttonUpdatePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sListener.updatePassword();
 
-                binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        sListener.account();
-
-                    }
-                });
             }
         });
         return binding.getRoot();
