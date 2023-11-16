@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
             selectedFragment = new DashboardFragment();
         }
         else if (itemId == R.id.following) {
-            selectedFragment = new FollowingFragment();
+            selectedFragment = new DiscoveryFragment();
         }
         else if (itemId == R.id.habits) {
             selectedFragment = new HabitsFragment();
@@ -118,6 +118,22 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         // Since we are signing out set bottom navigation to invisible
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void updateEmail() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new UpdateEmailFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void updatePassword() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new UpdatePasswordFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

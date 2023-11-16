@@ -50,7 +50,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewLike"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewInfo"
             app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
             app:srcCompat="@drawable/trashbin" />
 
@@ -66,7 +66,7 @@
             app:layout_constraintTop_toTopOf="@+id/imageViewDelete" />
 
         <ImageView
-            android:id="@+id/imageViewLike"
+            android:id="@+id/imageViewInfo"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"

@@ -165,6 +165,8 @@ public class EventsFragment extends Fragment {
                 //needs to change to change the number of attendees
                 mBinding.textViewEventNumerOfAttendees.setText(mEvent.getHabitType());
 
+
+
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {
                     mBinding.imageViewDelete.setVisibility(View.VISIBLE);

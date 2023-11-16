@@ -29,6 +29,20 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        binding.buttonUpdateEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sListener.updateEmail();
+            }
+        });
+
+        binding.buttonUpdatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sListener.updatePassword();
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -46,6 +60,8 @@ public class SettingsFragment extends Fragment {
 
     interface SettingsListener {
         void logout();
+        void updateEmail();
+        void updatePassword();
     }
 
 }
