@@ -29,6 +29,12 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sListener.account();
+            }
+        });
+
         return binding.getRoot();
     }
 
@@ -51,6 +57,7 @@ public class SettingsFragment extends Fragment {
 
     interface SettingsListener {
         void logout();
+        void account();
     }
-
 }
+

@@ -14,6 +14,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="habit_name">Habit Name</string>
 
+    <string name="account_label">Account</string>
+
+
     <string name="event_view_section_host_profile_image_content_description">Host profile photo</string>
     <string name="event_view_section_host_verified_image_content_description">Host verified</string>
 
@@ -24,4 +27,5 @@
     <string name="event_view_section_time_and_date_heading">Time &amp; Date</string>
 
     <string name="event_view_section_host_button_view">View</string>
+
 </resources>

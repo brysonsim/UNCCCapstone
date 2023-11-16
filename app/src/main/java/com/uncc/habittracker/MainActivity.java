@@ -14,8 +14,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.uncc.habittracker.data.model.Event;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener {
-    private Menu menuList;
+
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener {
+
+        private Menu menuList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +177,23 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     public void createNewHabit() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new CreateHabitFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void account() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new AccountFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    @Override
+    public void editAccount() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EditAccount())
                 .addToBackStack(null)
                 .commit();
     }
