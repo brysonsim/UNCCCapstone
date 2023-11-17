@@ -66,6 +66,15 @@
                 app:layout_constraintStart_toStartOf="@+id/userName"
                 app:layout_constraintTop_toBottomOf="@+id/userName" />
 
+            <Button
+                android:id="@+id/buttonAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_label"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="271dp"
+                tools:layout_editor_absoluteY="50dp" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -94,27 +103,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Button
-        android:id="@+id/buttonAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/account_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogout"
-        tools:ignore="MissingConstraints" />
-
     <Button
         android:id="@+id/buttonUpdatePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="Update Password"
-        app:layout_constraintEnd_toEndOf="@+id/buttonAccount"
-        app:layout_constraintStart_toStartOf="@+id/buttonAccount"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAccount" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/valueHostCardView"
+        tools:layout_editor_absoluteX="143dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
