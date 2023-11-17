@@ -33,17 +33,7 @@ public class User {
         return admin;
     }
 
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
-    }
 
-    public String getVerified() {
-        return verified;
-    }
-
-    public void setVerified(String verified) {
-        this.verified = verified;
-    }
 
     public User() {
 
@@ -105,6 +95,9 @@ public class User {
 
     public void setVerified(String verified) {
         this.verified = verified;
+    }
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 
     @Override
