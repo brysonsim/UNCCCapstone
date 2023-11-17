@@ -45,8 +45,10 @@ public class DiscoveryFragment extends Fragment {
         binding = FragmentDiscoveryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-        UserAdapter adapter;
-        ListenerRegistration listenerRegistration;
+
+    UserAdapter adapter;
+    ListenerRegistration listenerRegistration;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -117,23 +119,25 @@ public class DiscoveryFragment extends Fragment {
                 mBinding = itemBinding;
 
             }
-                public void setupUI(User user){
-                    this.mUser = user;
-                    mBinding.textViewProfileName.setText(mUser.getDisplayName());
-                    mBinding.buttonViewProfile.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(mBinding.buttonViewProfile.getText().toString().compareToIgnoreCase("follow")==0)
-                            {
-                                mBinding.buttonViewProfile.setText("Unfollow");
-                            }
-                            else{
-                                mBinding.buttonViewProfile.setText("Follow");
 
-                            }
+            public void setupUI(User user){
+                this.mUser = user;
+                mBinding.textViewProfileName.setText(mUser.getDisplayName());
+                mBinding.buttonViewProfile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(mBinding.buttonViewProfile.getText().toString().compareToIgnoreCase("follow")==0)
+                        {
+                            mBinding.buttonViewProfile.setText("Unfollow");
                         }
-                    });
-                }
+                        else{
+                            mBinding.buttonViewProfile.setText("Follow");
+
+                        }
+                    }
+                });
+            }
+
 
         }
     }

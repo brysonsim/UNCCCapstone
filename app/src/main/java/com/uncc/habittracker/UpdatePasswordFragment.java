@@ -64,7 +64,8 @@ public class UpdatePasswordFragment extends Fragment {
                                         mListener.logoutUpdatePass();
                                     }
                                     else{
-                                        Log.d("TAG", "password not updated");
+                                        Toast.makeText(getActivity(), "Password Could not be successfully completed. Please try logout and login again or try again later", Toast.LENGTH_LONG).show();
+
                                     }
                                 }
                             });
