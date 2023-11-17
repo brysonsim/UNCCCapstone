@@ -2,12 +2,33 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:id="@+id/settingView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsFragment" >
 
+    <Button
+        android:id="@+id/approveVerificationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:enabled="false"
+        android:text="@string/approve_verification"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/logout_label"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/valueHostCardView"
@@ -16,7 +37,7 @@
         android:layout_margin="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogout">
+        app:layout_constraintTop_toBottomOf="@+id/approveVerificationButton">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -66,51 +87,32 @@
                 app:layout_constraintStart_toStartOf="@+id/userName"
                 app:layout_constraintTop_toBottomOf="@+id/userName" />
 
-            <Button
-                android:id="@+id/buttonAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/account_label"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="271dp"
-                tools:layout_editor_absoluteY="50dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/buttonLogout"
+        android:id="@+id/buttonAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/logout_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/approveVerificationButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:enabled="false"
-        android:text="@string/approve_verification"
-        android:visibility="gone"
+        android:text="@string/account_label"
+        android:layout_marginTop="10dp"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/valueHostCardView" />
 
     <Button
         android:id="@+id/buttonUpdatePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update Password"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valueHostCardView"
-        tools:layout_editor_absoluteX="143dp" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAccount" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

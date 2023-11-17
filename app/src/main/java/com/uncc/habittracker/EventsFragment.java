@@ -176,7 +176,7 @@ public class EventsFragment extends Fragment {
                 mBinding.textViewEventTitle.setText(mEvent.getTitle());
                 mBinding.textViewDescription.setText(mEvent.getDescription());
                 //needs to change to change the number of attendees
-                mBinding.textViewEventNumerOfAttendees.setText(mEvent.getHabitType());
+                mBinding.textViewEventNumberOfAttendees.setText(mEvent.getHabitType());
 
 
 
