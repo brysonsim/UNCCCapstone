@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewEvent"
     android:layout_margin="6dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -42,6 +43,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewForumCreatedBy" />
 
+        <TextView
+            android:id="@+id/textViewEventNumberOfAttendees"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewDelete"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewEdit"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageViewDelete" />
+
+        <ImageView
+            android:id="@+id/imageViewEdit"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textViewEventNumberOfAttendees"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewDelete"
+            app:layout_constraintTop_toTopOf="@+id/textViewEventNumberOfAttendees"
+            app:srcCompat="@drawable/edit" />
+
         <ImageView
             android:id="@+id/imageViewDelete"
             android:layout_width="30dp"
@@ -49,30 +72,18 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewLike"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewInfo"
             app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
             app:srcCompat="@drawable/trashbin" />
 
-        <TextView
-            android:id="@+id/textViewEventNumerOfAttendees"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="@+id/imageViewDelete"
-            app:layout_constraintEnd_toStartOf="@+id/imageViewDelete"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageViewDelete" />
-
         <ImageView
-            android:id="@+id/imageViewLike"
+            android:id="@+id/imageViewInfo"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
-            app:srcCompat="@drawable/infopicture"
-            />
+            app:srcCompat="@drawable/infopicture" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
