@@ -48,7 +48,6 @@ public class HabitsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Habits");
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
@@ -134,6 +133,12 @@ public class HabitsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (HabitsListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Habits");
     }
 
     interface HabitsListener {

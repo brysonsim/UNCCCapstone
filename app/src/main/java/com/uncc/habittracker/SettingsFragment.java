@@ -37,7 +37,8 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
         binding.buttonLogout.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -45,12 +46,35 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
+//        binding.buttonUpdateEmail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sListener.updateEmail();
+//            }
+//        });
+
+        binding.buttonAccount.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                sListener.account();
+
+            }
+        });
+
+        binding.buttonUpdatePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sListener.updatePassword();
+
+            }
+        });
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         getActivity().setTitle("Settings");
 
 
@@ -159,10 +183,21 @@ public class SettingsFragment extends Fragment {
         sListener = (SettingsFragment.SettingsListener) context;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Settings");
+    }
+
     interface SettingsListener {
         void logout();
         void errorState();
         void openAdminApproval();
-    }
 
+        void updateEmail();
+        void updatePassword();
+        void account();
+
+    }
 }
+

@@ -63,6 +63,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         requireActivity().setTitle("View Event");
 
         binding.eventTitleTextView.setText(event.getTitle().toUpperCase());
@@ -71,7 +72,6 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
         binding.valueTimeAndDateTextView.setText(event.getTime().toString());
 
         Fragment fragment = this;
-
 
         db.collection("users")
                 .whereEqualTo("uid", event.getOwnerId())
@@ -82,6 +82,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
+
 
                                 if (user.getVerified().equals("1")) {
                                     binding.verifyIconImage.setVisibility(View.VISIBLE);
@@ -145,6 +146,8 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         mapView.onResume();
         super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("View Events");
+
     }
 
     @Override

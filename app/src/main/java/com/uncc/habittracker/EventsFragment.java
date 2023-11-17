@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -57,7 +58,6 @@ public class EventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Events") ;
 
         binding.recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new EventsAdapter(this.mListener, getActivity());
@@ -105,10 +105,18 @@ public class EventsFragment extends Fragment {
         mListener = (EventsListener) context;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Events");
+    }
+
     interface EventsListener
     {
         void createNewEvent();
+
         void editEvent(Event event);
+
         void viewEvent(Event event);
     }
 
@@ -170,6 +178,8 @@ public class EventsFragment extends Fragment {
                 //needs to change to change the number of attendees
                 mBinding.textViewEventNumerOfAttendees.setText(mEvent.getHabitType());
 
+
+
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {
                     mBinding.imageViewEdit.setVisibility(View.VISIBLE);
@@ -227,6 +237,13 @@ public class EventsFragment extends Fragment {
                     mBinding.imageViewEdit.setVisibility(View.INVISIBLE);
                     mBinding.imageViewDelete.setVisibility(View.INVISIBLE);
                 }
+
+                mBinding.cardViewEvent.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        listener.viewEvent(mEvent);
+                    }
+                });
 
                 mBinding.cardViewEvent.setOnClickListener(new View.OnClickListener(){
                     @Override

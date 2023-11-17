@@ -99,6 +99,7 @@ public class SignUpFragment extends Fragment {
                                             data.put("lastName", lastName.toUpperCase());
                                             data.put("uid", mAuth.getCurrentUser().getUid());
                                             data.put("about", "");
+                                            data.put("verified","0");
                                             data.put("usersHabits", new ArrayList<String>());
                                             data.put("verified","0");
                                             data.put("admin",false);
@@ -130,8 +131,6 @@ public class SignUpFragment extends Fragment {
                 }
             }
         });
-
-        getActivity().setTitle(R.string.create_account_label);
     }
 
     SignUpListener mListener;
@@ -140,6 +139,12 @@ public class SignUpFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mListener = (SignUpListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle(R.string.create_account_label);
     }
 
     interface SignUpListener {

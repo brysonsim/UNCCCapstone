@@ -12,9 +12,11 @@ public class User {
 
 
     //user fields
+
     private String firstName, lastName, uid, about, firebaseUid, verified;
     private Boolean admin;
     private ArrayList<Habit> Habits;
+    private ArrayList<User> following;
 
     public User(String firstName, String lastName, String uid, String about, String firebaseUid, String verified, Boolean admin, ArrayList<Habit> habits) {
         this.firstName = firstName;
@@ -97,6 +99,13 @@ public class User {
     }
 
     public String getDisplayName() { return firstName + " " + lastName; }
+    public String getVerified() {
+        return verified;
+    }
+
+    public void setVerified(String verified) {
+        this.verified = verified;
+    }
 
     @Override
     public String toString() {
