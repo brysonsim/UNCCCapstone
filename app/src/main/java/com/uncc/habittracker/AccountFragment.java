@@ -80,14 +80,18 @@ public class AccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Account");
-
     }
     AccountListener aListener;
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         aListener = (AccountFragment.AccountListener) context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Account");
     }
 
     interface AccountListener{

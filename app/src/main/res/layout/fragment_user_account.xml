@@ -34,8 +34,8 @@
 
     <ImageView
         android:id="@+id/userImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="116dp"
+        android:layout_height="128dp"
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.145"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:srcCompat="@drawable/placeholder_profile" />
 
     <TextView
         android:id="@+id/UserAboutTxt"
