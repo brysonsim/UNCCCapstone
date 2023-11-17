@@ -24,7 +24,7 @@
         <TextView
             android:id="@+id/textViewProfileName"
             android:layout_width="96dp"
-            android:layout_height="28dp"
+            android:layout_height="wrap_content"
             android:text="Name"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewDelete"
             app:layout_constraintEnd_toEndOf="parent"

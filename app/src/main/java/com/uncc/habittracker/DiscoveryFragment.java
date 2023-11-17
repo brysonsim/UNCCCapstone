@@ -53,7 +53,6 @@ public class DiscoveryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Discovery");
 
         binding.RecyclerViewPeople.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter =  new UserAdapter();
@@ -142,5 +141,9 @@ public class DiscoveryFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Discovery");
+    }
 }
