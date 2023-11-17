@@ -3,6 +3,7 @@ package com.uncc.habittracker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.accounts.Account;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
     private void showMenu()  {
         menuList.findItem(R.id.profile).setVisible(true);
-        menuList.findItem(R.id.people).setVisible(true);
+        //menuList.findItem(R.id.people).setVisible(true);
         menuList.findItem(R.id.sign_out).setVisible(true);
     }
 
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
         if (itemId == R.id.profile) {
             // TODO: Update this to point to the Profile/Account fragment
-            //selectedFragment = new DashboardFragment();
+            selectedFragment = new AccountFragment();
         }
         else if (itemId == R.id.people) {
             // TODO: Update this to point to the People/Discovery fragment
@@ -189,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .addToBackStack(null)
                 .commit();
     }
-
 
     @Override
     public void editAccount() {
