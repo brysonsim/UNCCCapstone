@@ -300,6 +300,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .replace(R.id.rootView, new ViewEventFragment(event))
                 .addToBackStack(null)
                 .commit();
+    }
 
 
     public void logoutUpdatePass() {
