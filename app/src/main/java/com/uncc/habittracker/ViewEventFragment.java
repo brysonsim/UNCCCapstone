@@ -69,7 +69,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
         binding.eventTitleTextView.setText(event.getTitle().toUpperCase());
         binding.valueHostTextView.setText(event.getOwnerName().toUpperCase());
         binding.valueAboutTextView.setText(event.getDescription().toUpperCase());
-        binding.valueTimeAndDateTextView.setText(event.getTime().toString());
+        binding.valueTimeAndDateTextView.setText(event.getTime().toDate().toString());
 
         Fragment fragment = this;
 
