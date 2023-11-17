@@ -23,6 +23,7 @@ public class User {
 
 
     private ArrayList<Habit> Habits;
+    private ArrayList<User> following;
 
     public User() {
 

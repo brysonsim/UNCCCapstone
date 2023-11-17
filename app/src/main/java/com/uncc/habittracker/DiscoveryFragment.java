@@ -45,8 +45,10 @@ public class DiscoveryFragment extends Fragment {
         binding = FragmentDiscoveryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
     UserAdapter adapter;
     ListenerRegistration listenerRegistration;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -117,6 +119,7 @@ public class DiscoveryFragment extends Fragment {
                 mBinding = itemBinding;
 
             }
+
             public void setupUI(User user){
                 this.mUser = user;
                 mBinding.textViewProfileName.setText(mUser.getDisplayName());
@@ -134,6 +137,7 @@ public class DiscoveryFragment extends Fragment {
                     }
                 });
             }
+
 
         }
     }
