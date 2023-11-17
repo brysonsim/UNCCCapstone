@@ -17,11 +17,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
 
 
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener {
 
         private Menu menuList;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,6 +229,19 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     @Override
+    public void errorState() {
+        login();
+    }
+
+    @Override
+    public void openAdminApproval() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ApproveVerification())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void cancelCreateHabit() {
         getSupportFragmentManager().popBackStack();
     }
@@ -248,6 +259,8 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
+
+
     @Override
     public void cancelEventCreation() {getSupportFragmentManager().popBackStack();    }
 
@@ -263,6 +276,32 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     }
 
     @Override
+
+    public void editEvent(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EditEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void goBackToHome() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void cancelEdit() {
+        getSupportFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void afterEditOpen(Event event) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new ViewEventFragment(event))
+                .addToBackStack(null)
+                .commit();
+
+
     public void logoutUpdatePass() {
         FirebaseAuth.getInstance().signOut();
         getSupportFragmentManager().beginTransaction()
@@ -272,5 +311,6 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         // Since we are signing out set bottom navigation to invisible
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setVisibility(View.INVISIBLE);
+
     }
 }

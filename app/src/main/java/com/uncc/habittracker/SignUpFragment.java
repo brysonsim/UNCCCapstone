@@ -25,6 +25,7 @@ import com.uncc.habittracker.databinding.FragmentSignUpBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class SignUpFragment extends Fragment {
     public SignUpFragment() {
@@ -94,12 +95,14 @@ public class SignUpFragment extends Fragment {
                                             DocumentReference docRef = db.collection("users").document();
 
                                             HashMap<String, Object> data = new HashMap<>();
-                                            data.put("firstName", firstName);
-                                            data.put("lastName", lastName);
+                                            data.put("firstName", firstName.toUpperCase());
+                                            data.put("lastName", lastName.toUpperCase());
                                             data.put("uid", mAuth.getCurrentUser().getUid());
                                             data.put("about", "");
                                             data.put("verified","0");
                                             data.put("usersHabits", new ArrayList<String>());
+                                            data.put("verified","0");
+                                            data.put("admin",false);
 
                                             docRef.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override

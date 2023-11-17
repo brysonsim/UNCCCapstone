@@ -64,9 +64,11 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.eventTitleTextView.setText(event.getTitle());
-        binding.valueHostTextView.setText(event.getOwnerName());
-        binding.valueAboutTextView.setText(event.getDescription());
+        requireActivity().setTitle("View Event");
+
+        binding.eventTitleTextView.setText(event.getTitle().toUpperCase());
+        binding.valueHostTextView.setText(event.getOwnerName().toUpperCase());
+        binding.valueAboutTextView.setText(event.getDescription().toUpperCase());
         binding.valueTimeAndDateTextView.setText(event.getTime().toString());
 
         Fragment fragment = this;
@@ -81,10 +83,10 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 User user = document.toObject(User.class);
 
-                                //if (user.getIsVerified()) {
-                                //    binding.verifiedUserImageView.setVisibility(View.VISIBLE);
-                                //    binding.verifiedUserTextView.setVisibility(View.VISIBLE);
-                                //}
+
+                                if (user.getVerified().equals("1")) {
+                                    binding.verifyIconImage.setVisibility(View.VISIBLE);
+                                }
 
                                 // Create a storage reference from our app
                                 StorageReference storageRef = storage.getReference();
@@ -145,6 +147,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
         super.onResume();
         ((MainActivity)getActivity()).getSupportActionBar().setTitle("View Events");
+
     }
 
     @Override
