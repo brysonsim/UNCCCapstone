@@ -86,6 +86,7 @@
                     android:id="@+id/verifyIconImage"
                     android:layout_width="30dp"
                     android:layout_height="0dp"
+                    android:contentDescription="@string/event_view_section_host_verified_image_content_description"
                     android:src="@drawable/verify"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/profilePhotoImageView"
@@ -133,7 +134,7 @@
                     android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"  />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -176,7 +177,7 @@
                     android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"  />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -228,6 +229,29 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/buttonDrop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/event_view_button_drop"
+            android:visibility="invisible"
+            app:layout_constraintWidth_max="320dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/valueLocationCardView"
+            tools:ignore="DuplicateClickableBoundsCheck" />
+
+        <Button
+            android:id="@+id/buttonRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/event_view_button_register"
+            android:visibility="invisible"
+            app:layout_constraintWidth_max="320dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/valueLocationCardView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
