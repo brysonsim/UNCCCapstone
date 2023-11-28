@@ -19,19 +19,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipDrawable;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.uncc.habittracker.data.model.HabitProgress;
 import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.data.model.UserHabitDoc;
@@ -104,18 +98,15 @@ public class DashboardFragment extends Fragment {
         // Query Firebase for all users and prepare content for our AutoCompleteTextView
         // TODO: When following logic implemented switch this to only pull users the logged in user
         //   has followed
-        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    if (task.getResult() != null) {
-                        for (QueryDocumentSnapshot doc : task.getResult()) {
-                            User user = doc.toObject(User.class);
-                            Log.d("Debug auto complete", user.getDisplayName());
-                            user.setFirebaseUid(doc.getId());
-                            mUsers.add(user);
-                            autoCompleteAdapterArray.add(user.getDisplayName());
-                        }
+        db.collection("users").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                if (task.getResult() != null) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                        User user = doc.toObject(User.class);
+                        Log.d("Debug auto complete", user.getDisplayName());
+                        user.setFirebaseUid(doc.getId());
+                        mUsers.add(user);
+                        autoCompleteAdapterArray.add(user.getDisplayName());
                     }
                 }
             }
@@ -146,25 +137,22 @@ public class DashboardFragment extends Fragment {
 
         // Setup the on item click listener for the AutoCompleteTextView. On selection, find the
         // matching user, and pull their habit data for comparison.
-        binding.autoCompleteCompareToTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String valueOfSelection = String.valueOf(binding.autoCompleteCompareToTextView.getText());
-                Log.d("Chosen selection", valueOfSelection);
+        binding.autoCompleteCompareToTextView.setOnItemClickListener((adapterView, view1, position, id) -> {
+            String valueOfSelection = String.valueOf(binding.autoCompleteCompareToTextView.getText());
+            Log.d("Chosen selection", valueOfSelection);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    // Locate the user matching the selected value.
-                    Optional<User> selectedUser = mUsers.stream()
-                            .filter(user -> user.getDisplayName().equals(valueOfSelection))
-                            .findFirst();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                // Locate the user matching the selected value.
+                Optional<User> selectedUser = mUsers.stream()
+                        .filter(user -> user.getDisplayName().equals(valueOfSelection))
+                        .findFirst();
 
-                    // If found, convert the text entered to a Chip UI element and pull
-                    if (selectedUser.isPresent()) {
-                        User mUser = selectedUser.get();
-                        Log.d("Chosen selection (val)", mUser.getFirebaseUid());
-                        createUserChip(mUser);
-                        setupDataListener(loggedInUserId, mUser.getUid());
-                    }
+                // If found, convert the text entered to a Chip UI element and pull
+                if (selectedUser.isPresent()) {
+                    User mUser = selectedUser.get();
+                    Log.d("Chosen selection (val)", mUser.getFirebaseUid());
+                    createUserChip(mUser);
+                    setupDataListener(loggedInUserId, mUser.getUid());
                 }
             }
         });
@@ -225,21 +213,18 @@ public class DashboardFragment extends Fragment {
             db.collection("habitProgress")
                     .whereEqualTo("userId", secondaryUserId)
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            HabitProgress habitProgress = document.toObject(HabitProgress.class);
-                            mCompareToUserHabits.add(habitProgress);
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                HabitProgress habitProgress = document.toObject(HabitProgress.class);
+                                mCompareToUserHabits.add(habitProgress);
+                            }
+
+                            Log.d("UserHabits compare", String.valueOf(mCompareToUserHabits.size()));
+
+                            initializeDataListener(userId, mCompareToUserHabits);
                         }
-
-                        Log.d("UserHabits compare", String.valueOf(mCompareToUserHabits.size()));
-
-                        initializeDataListener(userId, mCompareToUserHabits);
-                    }
-                }
-            });
+                    });
         }
         // Otherwise, rather than pulling a list of habit use the empty array we declared earlier in
         // preparation for setting up the RecyclerView data listener.
@@ -254,59 +239,56 @@ public class DashboardFragment extends Fragment {
         // the RecyclerView adapter that new data is available.
         listenerRegistration = db.collection("usersHabits")
                 .whereEqualTo("userId", userId)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    error.printStackTrace();
-                    return;
-                }
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        error.printStackTrace();
+                        return;
+                    }
 
-                mUserHabits.clear();
+                    mUserHabits.clear();
 
-                if (value != null) {
-                    for (QueryDocumentSnapshot doc : value) {
-                        // Convert query row result to an instance of our UserHabit data model.
-                        UserHabitDoc userHabit = doc.toObject(UserHabitDoc.class);
-                        userHabit.setDocId(doc.getId());
+                    if (value != null) {
+                        for (QueryDocumentSnapshot doc : value) {
+                            // Convert query row result to an instance of our UserHabit data model.
+                            UserHabitDoc userHabit = doc.toObject(UserHabitDoc.class);
+                            userHabit.setDocId(doc.getId());
 
-                        // If there are user habits to compare against do the comparison here.
-                        if (compareToUserHabits.size() > 0) {
-                            Log.d("UserHabits compare", userHabit.getHabitTypeID());
+                            // If there are user habits to compare against do the comparison here.
+                            if (compareToUserHabits.size() > 0) {
+                                Log.d("UserHabits compare", userHabit.getHabitTypeID());
 
-                            // When matching on another users habits make sure the habitTypeID and
-                            // frequency match.
-                            List<HabitProgress> selectedUserHabit = compareToUserHabits.stream()
-                                    .filter(compareToHabit -> compareToHabit.getHabitType().equals(userHabit.getHabitTypeID()))
-                                    .filter(compareToHabit -> compareToHabit.getFrequency().equals(userHabit.getFrequency()))
-                                    .collect(Collectors.toList());
+                                // When matching on another users habits make sure the habitTypeID and
+                                // frequency match.
+                                List<HabitProgress> selectedUserHabit = compareToUserHabits.stream()
+                                        .filter(compareToHabit -> compareToHabit.getHabitType().equals(userHabit.getHabitTypeID()))
+                                        .filter(compareToHabit -> compareToHabit.getFrequency().equals(userHabit.getFrequency()))
+                                        .collect(Collectors.toList());
 
-                            // If we get a match, set the progressSecondary attribute on the
-                            // UserHabit currently being processed.
-                            if (selectedUserHabit.size() > 0) {
-                                ArrayList<HabitProgress> mHabitProgressSecondary = new ArrayList<>(selectedUserHabit);
+                                // If we get a match, set the progressSecondary attribute on the
+                                // UserHabit currently being processed.
+                                if (selectedUserHabit.size() > 0) {
+                                    ArrayList<HabitProgress> mHabitProgressSecondary = new ArrayList<>(selectedUserHabit);
 
-                                switch (userHabit.getFrequency()) {
-                                    case "Daily":
-                                        userHabit.setProgressSecondary(getDailyProgress(mHabitProgressSecondary, userHabit));
-                                        break;
-                                    case "Weekly":
-                                        userHabit.setProgressSecondary(getWeeklyProgress(mHabitProgressSecondary, userHabit));
-                                        break;
-                                    default:
-                                        userHabit.setProgressSecondary(getMonthlyProgress(mHabitProgressSecondary, userHabit));
-                                        break;
+                                    switch (userHabit.getFrequency()) {
+                                        case "Daily":
+                                            userHabit.setProgressSecondary(getDailyProgress(mHabitProgressSecondary, userHabit));
+                                            break;
+                                        case "Weekly":
+                                            userHabit.setProgressSecondary(getWeeklyProgress(mHabitProgressSecondary, userHabit));
+                                            break;
+                                        default:
+                                            userHabit.setProgressSecondary(getMonthlyProgress(mHabitProgressSecondary, userHabit));
+                                            break;
+                                    }
                                 }
                             }
+
+                            mUserHabits.add(userHabit);
                         }
-
-                        mUserHabits.add(userHabit);
                     }
-                }
 
-                adapter.notifyDataSetChanged();
-            }
-        });
+                    adapter.notifyDataSetChanged();
+                });
     }
 
     public void pullHabitProgressForLoggedInUser() {
