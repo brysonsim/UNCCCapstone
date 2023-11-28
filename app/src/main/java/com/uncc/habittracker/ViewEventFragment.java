@@ -204,16 +204,24 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
     public void registerButtonClicked() {
         DocumentReference docRef = db.collection("habitProgress").document();
 
+        String userHabitDocId = "";
+        String frequency = "";
+
+        if (trackedUserHabit != null) {
+            userHabitDocId = trackedUserHabit.getDocId();
+            frequency = trackedUserHabit.getFrequency();
+        }
+
         HashMap<String, Object> data = new HashMap<>();
         data.put("docId", docRef.getId());
         data.put("habitType", event.getHabitType());
         data.put("source", "event");
-        data.put("userHabitDocId", trackedUserHabit.getDocId());
+        data.put("userHabitDocId", userHabitDocId);
         data.put("eventDocId", event.getDocId());
         data.put("userId", this.userId);
         data.put("progressDate", event.getTime().toDate());
         data.put("createdAt", FieldValue.serverTimestamp());
-        data.put("frequency", trackedUserHabit.getFrequency());
+        data.put("frequency", frequency);
 
         docRef.set(data).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
