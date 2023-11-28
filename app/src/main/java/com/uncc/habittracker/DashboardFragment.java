@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,12 +32,22 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.uncc.habittracker.data.model.HabitProgress;
 import com.uncc.habittracker.data.model.User;
-import com.uncc.habittracker.data.model.UserHabit;
+import com.uncc.habittracker.data.model.UserHabitDoc;
 import com.uncc.habittracker.databinding.FragmentDashboardBinding;
 import com.uncc.habittracker.databinding.DashboardRowItemBinding;
+import com.uncc.habittracker.utilities.DateUtils;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 public class DashboardFragment extends Fragment {
@@ -44,7 +55,8 @@ public class DashboardFragment extends Fragment {
     // components without having to use findViewByID first.
     FragmentDashboardBinding binding;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    ArrayList<UserHabit> mUserHabits = new ArrayList<>();
+    ArrayList<UserHabitDoc> mUserHabits = new ArrayList<>();
+    ArrayList<HabitProgress> mHabitProgressPrimary = new ArrayList<>();
     ArrayList<User> mUsers = new ArrayList<>();
     DashboardFragment.DashboardAdapter adapter;
     ArrayAdapter<String> autoCompleteAdapterArray;
@@ -52,16 +64,22 @@ public class DashboardFragment extends Fragment {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String loggedInUserId;
 
+    String TAG = "Dashboard";
+
     public DashboardFragment() {
         // Required empty public constructor
     }
 
     // Called when the fragment is instantiating its UI view.
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Initialize binding to layout where this fragment is assigned as the context.
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
+
+        // Retrieve the logged in users Firebase UID and store for later use
+        loggedInUserId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+
         return binding.getRoot();
     }
 
@@ -74,6 +92,8 @@ public class DashboardFragment extends Fragment {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new DashboardFragment.DashboardAdapter();
         binding.recyclerView.setAdapter(adapter);
+
+        pullHabitProgressForLoggedInUser();
 
         // Setup our ArrayAdapter be to used by the AutoCompleteTextView. This adapter controls the
         // UI of the elements in its dropdown.
@@ -122,23 +142,6 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        // Query Firebase and retrieve the logged in users Firebase UID. Store it for later usage.
-        db.collection("users")
-                .whereEqualTo("uid", mAuth.getCurrentUser().getUid())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Debug Get Id", document.getId());
-                                loggedInUserId = mAuth.getCurrentUser().getUid();
-                                setupDataListener(loggedInUserId);
-                            }
-                        }
-                    }
-                });
-
         // Setup the on item click listener for the AutoCompleteTextView. On selection, find the
         // matching user, and pull their habit data for comparison.
         binding.autoCompleteCompareToTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -174,7 +177,10 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Dashboard");
+
+        Optional.ofNullable((MainActivity)getActivity())
+                .map(AppCompatActivity::getSupportActionBar)
+                .ifPresent(actionBar -> actionBar.setTitle("Dashboard"));
     }
 
     private void destroyListenerRegistration() {
@@ -187,7 +193,8 @@ public class DashboardFragment extends Fragment {
     // The method converts the plain text keyed into the AutoCompleteTextView into a Chip UI
     // element.
     private void createUserChip(User selectedUser) {
-        ChipDrawable chip = ChipDrawable.createFromResource(this.getContext(), R.xml.standalone_chip);
+        ChipDrawable chip = ChipDrawable.createFromResource(
+                Objects.requireNonNull(this.getContext()), R.xml.standalone_chip);
         ImageSpan span = new ImageSpan(chip);
         int cursorPosition = binding.autoCompleteCompareToTextView.getSelectionStart();
         Editable text = binding.autoCompleteCompareToTextView.getText();
@@ -206,19 +213,23 @@ public class DashboardFragment extends Fragment {
     // compare against. It can also be passed a blank value for the secondary user to disable this.
     public void setupDataListener(String userId, String secondaryUserId) {
         destroyListenerRegistration();
-        ArrayList<UserHabit> mCompareToUserHabits = new ArrayList<>();
+        ArrayList<UserHabitDoc> mCompareToUserHabits = new ArrayList<>();
 
         Log.d("Secondary UserID", secondaryUserId);
 
         // If a secondary user was passed, pulls their habit data in preparation for setting up the
         // RecyclerView data listener.
         if (!secondaryUserId.isEmpty()) {
-            db.collection("usersHabits").whereEqualTo("userId", secondaryUserId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            db.collection("usersHabits")
+                    .whereEqualTo("userId", secondaryUserId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            UserHabit userHabit = document.toObject(UserHabit.class);
+                            UserHabitDoc userHabit = document.toObject(UserHabitDoc.class);
+                            userHabit.setDocId(document.getId());
                             mCompareToUserHabits.add(userHabit);
                         }
 
@@ -237,10 +248,12 @@ public class DashboardFragment extends Fragment {
     }
 
     // This sets up the data listener for the RecyclerView which drives the progress bars.
-    public void initializeDataListener(String userId, ArrayList<UserHabit> compareToUserHabits) {
+    public void initializeDataListener(String userId, ArrayList<UserHabitDoc> compareToUserHabits) {
         // Query the logged in users habits, compare to a secondary user (if applicable), and notify
         // the RecyclerView adapter that new data is available.
-        listenerRegistration = db.collection("usersHabits").whereEqualTo("userId", userId).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration = db.collection("usersHabits")
+                .whereEqualTo("userId", userId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
@@ -250,18 +263,19 @@ public class DashboardFragment extends Fragment {
 
                 mUserHabits.clear();
 
-                for (QueryDocumentSnapshot doc : value) {
-                    // Convert query row result to an instance of our UserHabit data model.
-                    UserHabit userHabit = doc.toObject(UserHabit.class);
+                if (value != null) {
+                    for (QueryDocumentSnapshot doc : value) {
+                        // Convert query row result to an instance of our UserHabit data model.
+                        UserHabitDoc userHabit = doc.toObject(UserHabitDoc.class);
+                        userHabit.setDocId(doc.getId());
 
-                    // If there are user habits to compare against do the comparison here.
-                    if (compareToUserHabits.size() > 0) {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        // If there are user habits to compare against do the comparison here.
+                        if (compareToUserHabits.size() > 0) {
                             Log.d("UserHabits compare", userHabit.getHabitTypeID());
 
                             // When matching on another users habits make sure the habitTypeID and
                             // frequency match.
-                            Optional<UserHabit> selectedUserHabit = compareToUserHabits.stream()
+                            Optional<UserHabitDoc> selectedUserHabit = compareToUserHabits.stream()
                                     .filter(compareToUserHabit -> compareToUserHabit.getHabitTypeID().equals(userHabit.getHabitTypeID()))
                                     .filter(compareToFrequency -> compareToFrequency.getFrequency().equals(userHabit.getFrequency()))
                                     .findFirst();
@@ -269,18 +283,38 @@ public class DashboardFragment extends Fragment {
                             // If we get a match, set the progressSecondary attribute on the
                             // UserHabit currently being processed.
                             if (selectedUserHabit.isPresent()) {
-                                UserHabit mCompareToUserHabit = selectedUserHabit.get();
+                                UserHabitDoc mCompareToUserHabit = selectedUserHabit.get();
                                 userHabit.setProgressSecondary(mCompareToUserHabit.getProgress());
                             }
                         }
-                    }
 
-                    mUserHabits.add(userHabit);
+                        mUserHabits.add(userHabit);
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public void pullHabitProgressForLoggedInUser() {
+        mHabitProgressPrimary.clear();
+
+        db.collection("habitProgress")
+                .whereEqualTo("userId", loggedInUserId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            HabitProgress habitProgress = document.toObject(HabitProgress.class);
+                            mHabitProgressPrimary.add(habitProgress);
+                        }
+                    }
+
+                    if (task.isComplete()) {
+                        setupDataListener(loggedInUserId);
+                    }
+                });
     }
 
     // Setup adapter for our RecyclerView. These provide a binding from an app-specific dataset to
@@ -298,7 +332,7 @@ public class DashboardFragment extends Fragment {
         // This is called by the RecyclerView to display the data at a given position.
         @Override
         public void onBindViewHolder(@NonNull DashboardFragment.DashboardAdapter.DashboardViewHolder holder, int position) {
-            UserHabit userHabit = mUserHabits.get(position);
+            UserHabitDoc userHabit = mUserHabits.get(position);
             holder.setupUI(userHabit);
         }
 
@@ -312,7 +346,7 @@ public class DashboardFragment extends Fragment {
         // This class describes the item view and metadata about its place within the RecyclerView.
         class DashboardViewHolder extends RecyclerView.ViewHolder {
             DashboardRowItemBinding mBinding;
-            UserHabit mUserHabit;
+            UserHabitDoc mUserHabit;
 
             // In this constructor we are taking the passed item binding and assigning it to an
             // internal attribute so we can use the binding within this class.
@@ -322,36 +356,46 @@ public class DashboardFragment extends Fragment {
             }
 
             // This method sets up the UI for each row of the RecyclerView.
-            public void setupUI(UserHabit userHabit) {
+            public void setupUI(UserHabitDoc userHabit) {
                 this.mUserHabit = userHabit;
                 mBinding.textViewHabitName.setText(mUserHabit.getNameOverride());
+
+                switch (mUserHabit.getFrequency()) {
+                    case "Daily":
+                        mUserHabit.setProgress(getDailyProgress(mHabitProgressPrimary, mUserHabit));
+                        break;
+                    case "Weekly":
+                        mUserHabit.setProgress(getWeeklyProgress(mHabitProgressPrimary, mUserHabit));
+                        break;
+                    default:
+                        mUserHabit.setProgress(getMonthlyProgress(mHabitProgressPrimary, mUserHabit));
+                        break;
+                }
 
                 Log.d("Debug progress", String.valueOf(mUserHabit.getProgress()));
 
                 // Retrieve habit progress
-                double habitProgress = (double)mUserHabit.getProgress();
+                double habitProgress = mUserHabit.getProgress();
                 double habitProgressPercent;
 
                 // Retrieve secondary habit progress (if applicable, this applies if a user is being
                 // compared to)
-                double habitProgressSecondary = (double)mUserHabit.getProgressSecondary();
+                double habitProgressSecondary = mUserHabit.getProgressSecondary();
                 double habitProgressSecondaryPercent;
 
-                Log.d("Progress Primary", mUserHabit.getHabitTypeID() + ": " + String.valueOf(habitProgress));
-                Log.d("Progress Secondary", mUserHabit.getHabitTypeID() + ": " + String.valueOf(habitProgressSecondary));
+                Log.d("Progress Primary", mUserHabit.getHabitTypeID() + ": " + habitProgress);
+                Log.d("Progress Secondary", mUserHabit.getHabitTypeID() + ": " + habitProgressSecondary);
 
                 // Calculate percentage completion based on the habit interval. We are showing
                 // progress at the week level so habits at the weekly and monthly level are
                 // calculated differently.
-                switch (mUserHabit.getFrequency()) {
-                    case "Daily":
-                        habitProgressPercent = (habitProgress / 7.0) * 100.0;
-                        habitProgressSecondaryPercent = (habitProgressSecondary / 7.0) * 100.0;
-                        break;
-                    default:
-                        habitProgressPercent = habitProgress * 100.0;
-                        habitProgressSecondaryPercent = habitProgressSecondary * 100.0;
-                        break;
+                if (mUserHabit.getFrequency().equals("Daily")) {
+                    habitProgressPercent = (habitProgress / 7.0) * 100.0;
+                    habitProgressSecondaryPercent = (habitProgressSecondary / 7.0) * 100.0;
+                }
+                else {
+                    habitProgressPercent = habitProgress * 100.0;
+                    habitProgressSecondaryPercent = habitProgressSecondary * 100.0;
                 }
 
                 // If habit progress percent is greater than 100%, update it.
@@ -395,5 +439,71 @@ public class DashboardFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public HashSet<Date> getHabitsMatchingCriteria(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit,
+                                    Date startDate, Date endDate) {
+        HashSet<Date> dates = new HashSet<>();
+
+        Log.d(TAG, startDate.toString() + "   " + endDate.toString());
+        Log.d(TAG, habitProgress.toString());
+
+        Optional<HabitProgress> matchedProgress = habitProgress.stream()
+                .filter(progress -> progress.getUserHabitDocId().equals(habit.getDocId()))
+                .filter(progress -> progress.getProgressDate().toDate().compareTo(startDate) > 0)
+                .filter(progress -> progress.getProgressDate().toDate().compareTo(endDate) < 0)
+                .findFirst();
+
+        if (matchedProgress.isPresent()) {
+            HabitProgress hp = matchedProgress.get();
+
+            dates.add(DateUtils.removeTime(hp.getProgressDate().toDate()));
+
+            Log.d(TAG, hp.toString());
+            Log.d(TAG, String.valueOf(dates.size()));
+        }
+        else {
+            Log.d(TAG, "Not found");
+        }
+
+        return dates;
+    }
+
+    public HashSet<Date> uniqueDatesInWeek(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+        LocalDate endLocalDate = LocalDate.now();
+        LocalDate startLocalDate = endLocalDate.with(WeekFields.of(Locale.US).dayOfWeek(), 1L);
+
+        Date startDate = Date.from(startLocalDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant());
+        Date endDate = Date.from(LocalTime.MAX.atDate(endLocalDate).atZone(ZoneOffset.systemDefault()).toInstant());
+
+        return getHabitsMatchingCriteria(habitProgress, habit, startDate, endDate);
+    }
+
+    public HashSet<Date> uniqueDatesInMonth(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+        LocalDate endLocalDate = LocalDate.now();
+        LocalDate startLocalDate = endLocalDate.withDayOfMonth(1);
+
+        Date startDate = Date.from(startLocalDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant());
+        Date endDate = Date.from(LocalTime.MAX.atDate(endLocalDate).atZone(ZoneOffset.systemDefault()).toInstant());
+
+        return getHabitsMatchingCriteria(habitProgress, habit, startDate, endDate);
+    }
+
+    public int getDailyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+        HashSet<Date> dates = uniqueDatesInWeek(habitProgress, habit);
+
+        return dates.size();
+    }
+
+    public int getWeeklyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+        HashSet<Date> dates = uniqueDatesInWeek(habitProgress, habit);
+
+        return (dates.size() > 0) ? 1 : 0;
+    }
+
+    public int getMonthlyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+        HashSet<Date> dates = uniqueDatesInMonth(habitProgress, habit);
+
+        return (dates.size() > 0) ? 1 : 0;
     }
 }
