@@ -213,6 +213,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
         data.put("userId", this.userId);
         data.put("progressDate", event.getTime().toDate());
         data.put("createdAt", FieldValue.serverTimestamp());
+        data.put("frequency", trackedUserHabit.getFrequency());
 
         docRef.set(data).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

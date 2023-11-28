@@ -46,9 +46,11 @@ import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DashboardFragment extends Fragment {
     // This variable will hold the binding to our fragment UI. Using this allows us to access
@@ -213,14 +215,14 @@ public class DashboardFragment extends Fragment {
     // compare against. It can also be passed a blank value for the secondary user to disable this.
     public void setupDataListener(String userId, String secondaryUserId) {
         destroyListenerRegistration();
-        ArrayList<UserHabitDoc> mCompareToUserHabits = new ArrayList<>();
+        ArrayList<HabitProgress> mCompareToUserHabits = new ArrayList<>();
 
         Log.d("Secondary UserID", secondaryUserId);
 
         // If a secondary user was passed, pulls their habit data in preparation for setting up the
         // RecyclerView data listener.
         if (!secondaryUserId.isEmpty()) {
-            db.collection("usersHabits")
+            db.collection("habitProgress")
                     .whereEqualTo("userId", secondaryUserId)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -228,9 +230,8 @@ public class DashboardFragment extends Fragment {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            UserHabitDoc userHabit = document.toObject(UserHabitDoc.class);
-                            userHabit.setDocId(document.getId());
-                            mCompareToUserHabits.add(userHabit);
+                            HabitProgress habitProgress = document.toObject(HabitProgress.class);
+                            mCompareToUserHabits.add(habitProgress);
                         }
 
                         Log.d("UserHabits compare", String.valueOf(mCompareToUserHabits.size()));
@@ -248,7 +249,7 @@ public class DashboardFragment extends Fragment {
     }
 
     // This sets up the data listener for the RecyclerView which drives the progress bars.
-    public void initializeDataListener(String userId, ArrayList<UserHabitDoc> compareToUserHabits) {
+    public void initializeDataListener(String userId, ArrayList<HabitProgress> compareToUserHabits) {
         // Query the logged in users habits, compare to a secondary user (if applicable), and notify
         // the RecyclerView adapter that new data is available.
         listenerRegistration = db.collection("usersHabits")
@@ -275,16 +276,27 @@ public class DashboardFragment extends Fragment {
 
                             // When matching on another users habits make sure the habitTypeID and
                             // frequency match.
-                            Optional<UserHabitDoc> selectedUserHabit = compareToUserHabits.stream()
-                                    .filter(compareToUserHabit -> compareToUserHabit.getHabitTypeID().equals(userHabit.getHabitTypeID()))
-                                    .filter(compareToFrequency -> compareToFrequency.getFrequency().equals(userHabit.getFrequency()))
-                                    .findFirst();
+                            List<HabitProgress> selectedUserHabit = compareToUserHabits.stream()
+                                    .filter(compareToHabit -> compareToHabit.getHabitType().equals(userHabit.getHabitTypeID()))
+                                    .filter(compareToHabit -> compareToHabit.getFrequency().equals(userHabit.getFrequency()))
+                                    .collect(Collectors.toList());
 
                             // If we get a match, set the progressSecondary attribute on the
                             // UserHabit currently being processed.
-                            if (selectedUserHabit.isPresent()) {
-                                UserHabitDoc mCompareToUserHabit = selectedUserHabit.get();
-                                userHabit.setProgressSecondary(mCompareToUserHabit.getProgress());
+                            if (selectedUserHabit.size() > 0) {
+                                ArrayList<HabitProgress> mHabitProgressSecondary = new ArrayList<>(selectedUserHabit);
+
+                                switch (userHabit.getFrequency()) {
+                                    case "Daily":
+                                        userHabit.setProgressSecondary(getDailyProgress(mHabitProgressSecondary, userHabit));
+                                        break;
+                                    case "Weekly":
+                                        userHabit.setProgressSecondary(getWeeklyProgress(mHabitProgressSecondary, userHabit));
+                                        break;
+                                    default:
+                                        userHabit.setProgressSecondary(getMonthlyProgress(mHabitProgressSecondary, userHabit));
+                                        break;
+                                }
                             }
                         }
 
@@ -441,35 +453,36 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    public HashSet<Date> getHabitsMatchingCriteria(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit,
-                                    Date startDate, Date endDate) {
+    public HashSet<Date> getHabitsMatchingCriteria(ArrayList<HabitProgress> habitProgress,
+                                                   UserHabitDoc habit, Date startDate,
+                                                   Date endDate) {
         HashSet<Date> dates = new HashSet<>();
 
         Log.d(TAG, startDate.toString() + "   " + endDate.toString());
         Log.d(TAG, habitProgress.toString());
 
-        Optional<HabitProgress> matchedProgress = habitProgress.stream()
+        List<HabitProgress> habitProgressMatches = habitProgress.stream()
                 .filter(progress -> progress.getUserHabitDocId().equals(habit.getDocId()))
                 .filter(progress -> progress.getProgressDate().toDate().compareTo(startDate) > 0)
                 .filter(progress -> progress.getProgressDate().toDate().compareTo(endDate) < 0)
-                .findFirst();
+                .collect(Collectors.toList());
 
-        if (matchedProgress.isPresent()) {
-            HabitProgress hp = matchedProgress.get();
-
-            dates.add(DateUtils.removeTime(hp.getProgressDate().toDate()));
-
-            Log.d(TAG, hp.toString());
-            Log.d(TAG, String.valueOf(dates.size()));
+        if (habitProgressMatches.size() > 0) {
+            for (HabitProgress habitProgressMatch : habitProgressMatches) {
+                Log.d(TAG, habitProgressMatch.toString());
+                dates.add(DateUtils.removeTime(habitProgressMatch.getProgressDate().toDate()));
+            }
         }
         else {
             Log.d(TAG, "Not found");
         }
 
+        Log.d(TAG, String.valueOf(dates.size()));
         return dates;
     }
 
-    public HashSet<Date> uniqueDatesInWeek(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+    public HashSet<Date> uniqueDatesInWeek(ArrayList<HabitProgress> habitProgress,
+                                           UserHabitDoc habit) {
         LocalDate endLocalDate = LocalDate.now();
         LocalDate startLocalDate = endLocalDate.with(WeekFields.of(Locale.US).dayOfWeek(), 1L);
 
@@ -479,7 +492,8 @@ public class DashboardFragment extends Fragment {
         return getHabitsMatchingCriteria(habitProgress, habit, startDate, endDate);
     }
 
-    public HashSet<Date> uniqueDatesInMonth(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
+    public HashSet<Date> uniqueDatesInMonth(ArrayList<HabitProgress> habitProgress,
+                                            UserHabitDoc habit) {
         LocalDate endLocalDate = LocalDate.now();
         LocalDate startLocalDate = endLocalDate.withDayOfMonth(1);
 

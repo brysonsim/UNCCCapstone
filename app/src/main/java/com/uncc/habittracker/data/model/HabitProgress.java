@@ -5,7 +5,7 @@ import com.google.firebase.Timestamp;
 import java.io.Serializable;
 
 public class HabitProgress implements Serializable {
-    private String habitType, source, userHabitDocId, eventDocId, userId, docId;
+    private String habitType, source, userHabitDocId, eventDocId, userId, docId, frequency;
     private Timestamp progressDate, createdAt;
 
     public HabitProgress() {
@@ -74,5 +74,13 @@ public class HabitProgress implements Serializable {
 
     public void setDocId(String docId) {
         this.docId = docId;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
     }
 }
