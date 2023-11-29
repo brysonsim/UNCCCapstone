@@ -33,15 +33,8 @@ import com.uncc.habittracker.databinding.FragmentDashboardBinding;
 import com.uncc.habittracker.databinding.DashboardRowItemBinding;
 import com.uncc.habittracker.utilities.DateUtils;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneOffset;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -93,7 +86,8 @@ public class DashboardFragment extends Fragment {
 
         // Setup our ArrayAdapter be to used by the AutoCompleteTextView. This adapter controls the
         // UI of the elements in its dropdown.
-        autoCompleteAdapterArray = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1);
+        autoCompleteAdapterArray = new ArrayAdapter<>(view.getContext(),
+                android.R.layout.simple_list_item_1);
 
         // Query Firebase for all users and prepare content for our AutoCompleteTextView
         // TODO: When following logic implemented switch this to only pull users the logged in user
@@ -271,13 +265,13 @@ public class DashboardFragment extends Fragment {
 
                                     switch (userHabit.getFrequency()) {
                                         case "Daily":
-                                            userHabit.setProgressSecondary(getDailyProgress(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getDailyProgressForWeek(mHabitProgressSecondary, userHabit));
                                             break;
                                         case "Weekly":
-                                            userHabit.setProgressSecondary(getWeeklyProgress(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getWeeklyProgressForWeek(mHabitProgressSecondary, userHabit));
                                             break;
                                         default:
-                                            userHabit.setProgressSecondary(getMonthlyProgress(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getMonthlyProgress(mHabitProgressSecondary, userHabit));
                                             break;
                                     }
                                 }
@@ -356,13 +350,13 @@ public class DashboardFragment extends Fragment {
 
                 switch (mUserHabit.getFrequency()) {
                     case "Daily":
-                        mUserHabit.setProgress(getDailyProgress(mHabitProgressPrimary, mUserHabit));
+                        mUserHabit.setProgress(DateUtils.getDailyProgressForWeek(mHabitProgressPrimary, mUserHabit));
                         break;
                     case "Weekly":
-                        mUserHabit.setProgress(getWeeklyProgress(mHabitProgressPrimary, mUserHabit));
+                        mUserHabit.setProgress(DateUtils.getWeeklyProgressForWeek(mHabitProgressPrimary, mUserHabit));
                         break;
                     default:
-                        mUserHabit.setProgress(getMonthlyProgress(mHabitProgressPrimary, mUserHabit));
+                        mUserHabit.setProgress(DateUtils.getMonthlyProgress(mHabitProgressPrimary, mUserHabit));
                         break;
                 }
 
@@ -433,73 +427,5 @@ public class DashboardFragment extends Fragment {
                 }
             }
         }
-    }
-
-    public HashSet<Date> getHabitsMatchingCriteria(ArrayList<HabitProgress> habitProgress,
-                                                   UserHabitDoc habit, Date startDate,
-                                                   Date endDate) {
-        HashSet<Date> dates = new HashSet<>();
-
-        Log.d(TAG, startDate.toString() + "   " + endDate.toString());
-        Log.d(TAG, habitProgress.toString());
-
-        List<HabitProgress> habitProgressMatches = habitProgress.stream()
-                .filter(progress -> progress.getUserHabitDocId().equals(habit.getDocId()))
-                .filter(progress -> progress.getProgressDate().toDate().compareTo(startDate) > 0)
-                .filter(progress -> progress.getProgressDate().toDate().compareTo(endDate) < 0)
-                .collect(Collectors.toList());
-
-        if (habitProgressMatches.size() > 0) {
-            for (HabitProgress habitProgressMatch : habitProgressMatches) {
-                Log.d(TAG, habitProgressMatch.toString());
-                dates.add(DateUtils.removeTime(habitProgressMatch.getProgressDate().toDate()));
-            }
-        }
-        else {
-            Log.d(TAG, "Not found");
-        }
-
-        Log.d(TAG, String.valueOf(dates.size()));
-        return dates;
-    }
-
-    public HashSet<Date> uniqueDatesInWeek(ArrayList<HabitProgress> habitProgress,
-                                           UserHabitDoc habit) {
-        LocalDate endLocalDate = LocalDate.now();
-        LocalDate startLocalDate = endLocalDate.with(WeekFields.of(Locale.US).dayOfWeek(), 1L);
-
-        Date startDate = Date.from(startLocalDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant());
-        Date endDate = Date.from(LocalTime.MAX.atDate(endLocalDate).atZone(ZoneOffset.systemDefault()).toInstant());
-
-        return getHabitsMatchingCriteria(habitProgress, habit, startDate, endDate);
-    }
-
-    public HashSet<Date> uniqueDatesInMonth(ArrayList<HabitProgress> habitProgress,
-                                            UserHabitDoc habit) {
-        LocalDate endLocalDate = LocalDate.now();
-        LocalDate startLocalDate = endLocalDate.withDayOfMonth(1);
-
-        Date startDate = Date.from(startLocalDate.atStartOfDay(ZoneOffset.systemDefault()).toInstant());
-        Date endDate = Date.from(LocalTime.MAX.atDate(endLocalDate).atZone(ZoneOffset.systemDefault()).toInstant());
-
-        return getHabitsMatchingCriteria(habitProgress, habit, startDate, endDate);
-    }
-
-    public int getDailyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
-        HashSet<Date> dates = uniqueDatesInWeek(habitProgress, habit);
-
-        return dates.size();
-    }
-
-    public int getWeeklyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
-        HashSet<Date> dates = uniqueDatesInWeek(habitProgress, habit);
-
-        return (dates.size() > 0) ? 1 : 0;
-    }
-
-    public int getMonthlyProgress(ArrayList<HabitProgress> habitProgress, UserHabitDoc habit) {
-        HashSet<Date> dates = uniqueDatesInMonth(habitProgress, habit);
-
-        return (dates.size() > 0) ? 1 : 0;
     }
 }

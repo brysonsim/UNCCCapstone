@@ -8,20 +8,25 @@
     <string name="password_label">Password</string>
     <string name="login_label">Login</string>
     <string name="logout_label">Logout</string>
-    <string name="create_habit">New Habit</string>
+
     <string name="create_account_label">Create New Account</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Habits -->
     <string name="habit_name">Habit Name</string>
+    <string name="create_habit">New Habit</string>
+    <string name="confirm_habit_progress">Confirm</string>
 
 
     <string name="account_label">Account</string>
 
+
+    <!-- Events -->
     <string name="event_register_dialog_choose_habit">Choose a Habit:</string>
 
     <string name="event_view_section_host_profile_image_content_description">Host profile photo</string>
     <string name="event_view_section_host_verified_image_content_description">Host verified</string>
-
     <string name="event_view_section_location_map_content_description">Map showing location of event</string>
     <string name="event_view_section_about_heading">About</string>
     <string name="event_view_section_host_heading">Host</string>

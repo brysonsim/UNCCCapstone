@@ -328,4 +328,11 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .replace(R.id.rootView, new EventsFragment())
                 .commit();
     }
+
+    @Override
+    public void confirmHabit() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new HabitsFragment())
+                .commit();
+    }
 }
