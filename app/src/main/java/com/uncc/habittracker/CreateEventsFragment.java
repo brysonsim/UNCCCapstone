@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.databinding.FragmentCreateEventsBinding;
 import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
@@ -34,12 +38,31 @@ public class CreateEventsFragment extends Fragment {
     }
     FragmentCreateEventsBinding binding;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         binding = FragmentCreateEventsBinding.inflate(inflater, container, false);
+        db.collection("users")
+                .whereEqualTo("uid", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+
+                                if (user.getVerified().equals("1")) {
+                                    binding.sponsoredCheckBox.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                });
         return binding.getRoot();
     }
 
@@ -89,6 +112,7 @@ public class CreateEventsFragment extends Fragment {
                     GeoPoint gp = new GeoPoint(0 , 0);
                     data.put("location", gp);
 
+                    data.put("sponsored", binding.sponsoredCheckBox.isChecked());
 
                     data.put("title", title);
                     data.put("description", desc);

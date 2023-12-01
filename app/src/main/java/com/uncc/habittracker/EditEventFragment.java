@@ -14,13 +14,19 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.uncc.habittracker.data.model.Event;
+import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.databinding.FragmentEditEventBinding;
 
 import java.util.HashMap;
@@ -35,6 +41,8 @@ public class EditEventFragment extends Fragment {
 
     Event event;
     FragmentEditEventBinding binding;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     public EditEventFragment() {
         // Required empty public constructor
@@ -63,6 +71,26 @@ public class EditEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentEditEventBinding.inflate(inflater, container, false);
+
+        // Checks if the current user is verified to either show the "Sponsored" checkbox or keep it hidden
+        db.collection("users")
+                .whereEqualTo("uid", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+
+                                if (user.getVerified().equals("1")) {
+                                    binding.editSponsoredCheckBox.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                });
+
         return binding.getRoot();
 
     }
@@ -84,6 +112,8 @@ public class EditEventFragment extends Fragment {
         }else if (habit.equals("Mindfulness")){
             binding.typeSelector.check(R.id.rbLifestyle);
         }
+
+        binding.editSponsoredCheckBox.setChecked(event.getSponsored());
 
         binding.buttonCancelEventEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +141,7 @@ public class EditEventFragment extends Fragment {
                 data.put("description", binding.editTextTextDescription.getText().toString().toUpperCase());
                 data.put("habitType", habitType);
                 data.put("location", gp);
+                data.put("sponsored", binding.editSponsoredCheckBox.isChecked());
 
                 docRef.update(data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -124,6 +155,7 @@ public class EditEventFragment extends Fragment {
                                         event.setDescription(binding.editTextTextDescription.getText().toString().toUpperCase());
                                         event.setHabitType(habitType);
                                         event.setLocation(gp);
+                                        event.setSponsored(binding.editSponsoredCheckBox.isChecked());
                                         mListener.afterEditOpen(event);
                                     }
                                 });
