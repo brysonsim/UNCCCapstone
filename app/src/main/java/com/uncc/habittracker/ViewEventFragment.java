@@ -83,8 +83,9 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
             binding.buttonRegister.setVisibility(View.GONE);
         }
         // Determine whether the user is currently registered for the event. This will control
-        // whether the Register or Drop button is shown.
-        else {
+        // whether the Register or Drop button is shown. Do not show anything if the user created
+        // the event.
+        else if (!event.getOwnerId().equals(userId)) {
             db.collection("habitProgress")
                     .whereEqualTo("userId", userId)
                     .whereEqualTo("eventDocId", event.getDocId())
@@ -243,7 +244,7 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
 
         docRef.delete()
                 .addOnSuccessListener(unused -> mListener.eventDrop())
-                .addOnFailureListener(e -> Objects.requireNonNull(getActivity()).runOnUiThread(() ->
+                .addOnFailureListener(e -> requireActivity().runOnUiThread(() ->
                         Toast.makeText(getContext(), "Error: Event registration not deleted!",
                                 Toast.LENGTH_SHORT).show()));
     }

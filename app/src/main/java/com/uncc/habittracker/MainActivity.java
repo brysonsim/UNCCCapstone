@@ -248,7 +248,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
     @Override
     public void doneCreateHabit() {
-        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new HabitsFragment())
+                .commit();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.uncc.habittracker;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -135,19 +134,17 @@ public class DashboardFragment extends Fragment {
             String valueOfSelection = String.valueOf(binding.autoCompleteCompareToTextView.getText());
             Log.d("Chosen selection", valueOfSelection);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // Locate the user matching the selected value.
-                Optional<User> selectedUser = mUsers.stream()
-                        .filter(user -> user.getDisplayName().equals(valueOfSelection))
-                        .findFirst();
+            // Locate the user matching the selected value.
+            Optional<User> selectedUser = mUsers.stream()
+                    .filter(user -> user.getDisplayName().equals(valueOfSelection))
+                    .findFirst();
 
-                // If found, convert the text entered to a Chip UI element and pull
-                if (selectedUser.isPresent()) {
-                    User mUser = selectedUser.get();
-                    Log.d("Chosen selection (val)", mUser.getFirebaseUid());
-                    createUserChip(mUser);
-                    setupDataListener(loggedInUserId, mUser.getUid());
-                }
+            // If found, convert the text entered to a Chip UI element and pull
+            if (selectedUser.isPresent()) {
+                User mUser = selectedUser.get();
+                Log.d("Chosen selection (val)", mUser.getFirebaseUid());
+                createUserChip(mUser);
+                setupDataListener(loggedInUserId, mUser.getUid());
             }
         });
     }
@@ -178,7 +175,7 @@ public class DashboardFragment extends Fragment {
     // element.
     private void createUserChip(User selectedUser) {
         ChipDrawable chip = ChipDrawable.createFromResource(
-                Objects.requireNonNull(this.getContext()), R.xml.standalone_chip);
+                this.requireContext(), R.xml.standalone_chip);
         ImageSpan span = new ImageSpan(chip);
         int cursorPosition = binding.autoCompleteCompareToTextView.getSelectionStart();
         Editable text = binding.autoCompleteCompareToTextView.getText();
