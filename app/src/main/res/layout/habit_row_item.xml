@@ -2,7 +2,9 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardViewHabit"
     android:layout_margin="6dp"
+    android:minHeight="64dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,20 +15,34 @@
 
         <TextView
             android:id="@+id/textViewHabitName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/textViewHabitType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/textViewHabitName"
+            app:layout_constraintEnd_toStartOf="@+id/checkBoxHabitProgress"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <CheckBox
+            android:id="@+id/checkBoxHabitProgress"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:button="@null"
+            android:background="?android:attr/listChoiceIndicatorMultiple"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
