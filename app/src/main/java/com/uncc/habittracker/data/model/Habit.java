@@ -6,12 +6,29 @@ import java.io.Serializable;
 
 public class Habit implements Serializable {
 
-    private String frequency, habitTypeID, nameOverride, userId;
+    private String frequency;
+    private String habitTypeID;
+    private String nameOverride;
+    private String userId;
+
+
+
+    private String docId;
     private int progress;
     private Timestamp createdAt;
     public Habit() {
 
     }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+
 
     public String getFrequency() {
         return frequency;
@@ -59,5 +76,18 @@ public class Habit implements Serializable {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Habit{" +
+                "frequency='" + frequency + '\'' +
+                ", habitTypeID='" + habitTypeID + '\'' +
+                ", nameOverride='" + nameOverride + '\'' +
+                ", userId='" + userId + '\'' +
+                ", docId='" + docId + '\'' +
+                ", progress=" + progress +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
