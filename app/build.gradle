@@ -16,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        buildConfigField "String", "MAPS_API_KEY", """ + properties.getProperty('MAPS_API_KEY') + """
+
     }
 
     buildTypes {
@@ -50,6 +55,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-storage'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'com.google.android.libraries.places:places:3.3.0'
 }
 
 configurations.implementation {

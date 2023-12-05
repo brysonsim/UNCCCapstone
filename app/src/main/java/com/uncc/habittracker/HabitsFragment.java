@@ -14,10 +14,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -72,6 +78,14 @@ public class HabitsFragment extends Fragment {
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
 
+
+                mHabits.clear();
+                //add the habits to an array list for storing based on the habit class scheme
+                for (QueryDocumentSnapshot doc: value) {
+                    Habit habit = doc.toObject(Habit.class);
+                    habit.setDocId(doc.getId());
+                    mHabits.add(habit);
+                }
         getCurrentHabitProgress();
 
         binding.buttonCreateHabit.setOnClickListener(new View.OnClickListener() {
@@ -201,6 +215,34 @@ public class HabitsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull HabitsViewHolder holder, int position) {
+
+            Habit habit = mHabits.get(position);
+            holder.mBinding.deleteHabitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    db.collection("usersHabits")
+                            .document(habit.getDocId())
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), "Error : Delete failed Server Error", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            });
+                }
+            });
+
             UserHabitDoc habit = mUserHabits.get(position);
             holder.setupUI(habit);
         }
@@ -220,6 +262,7 @@ public class HabitsFragment extends Fragment {
             }
 
             //display data in the text holders
+
             public void setupUI(UserHabitDoc userHabit) {
                 this.mUserHabit = userHabit;
                 mBinding.textViewHabitName.setText(mUserHabit.getNameOverride());
