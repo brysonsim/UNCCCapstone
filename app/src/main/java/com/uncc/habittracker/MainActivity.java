@@ -13,12 +13,13 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.uncc.habittracker.data.model.Event;
+import com.uncc.habittracker.data.model.User;
 
 public class MainActivity extends AppCompatActivity implements LoginFragment.LoginListener, SignUpFragment.SignUpListener,
 
 
 
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener, ViewEventFragment.ViewEventListener {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener, ViewEventFragment.ViewEventListener, DiscoveryFragment.ListenerDiscovery {
 
         private Menu menuList;
 
@@ -335,6 +336,13 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
     public void confirmHabit() {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.rootView, new HabitsFragment())
+                .commit();
+    }
+
+    @Override
+    public void GoToUserProfile(User user) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new FollowingUserProfile(user))
                 .commit();
     }
 }

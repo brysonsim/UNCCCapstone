@@ -1,5 +1,6 @@
 package com.uncc.habittracker;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,17 @@ public class DiscoveryFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mListener = (ListenerDiscovery) context;
+    }
+    ListenerDiscovery mListener;
+
+    interface ListenerDiscovery {
+        void GoToUserProfile(User user);
+    }
+
     class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder>{
         @NonNull
         @Override
@@ -122,19 +134,29 @@ public class DiscoveryFragment extends Fragment {
             public void setupUI(User user){
                 this.mUser = user;
                 mBinding.textViewProfileName.setText(mUser.getDisplayName());
-                mBinding.buttonViewProfile.setOnClickListener(new View.OnClickListener() {
+                mBinding.buttonViewProfile.setVisibility(View.INVISIBLE);
+//                mBinding.buttonViewProfile.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        if(mBinding.buttonViewProfile.getText().toString().compareToIgnoreCase("follow")==0)
+//                        {
+//                            mBinding.buttonViewProfile.setText("Unfollow");
+//                        }
+//                        else{
+//                            mBinding.buttonViewProfile.setText("Follow");
+//
+//                        }
+//                    }
+//                });
+
+                mBinding.cardViewEvent.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(mBinding.buttonViewProfile.getText().toString().compareToIgnoreCase("follow")==0)
-                        {
-                            mBinding.buttonViewProfile.setText("Unfollow");
-                        }
-                        else{
-                            mBinding.buttonViewProfile.setText("Follow");
-
-                        }
+                        mListener.GoToUserProfile(user);
                     }
                 });
+
+
             }
 
 
