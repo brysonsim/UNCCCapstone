@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
 
 
-        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener {
+        HabitsFragment.HabitsListener, CreateHabitFragment.CreateHabitListener, SettingsFragment.SettingsListener, EventsFragment.EventsListener, CreateEventsFragment.CreateEventListener, AccountFragment.AccountListener, EditAccount.EditListener, UpdatePasswordFragment.UpdatePassword, ApproveVerification.ApproveVerificationListener , EditEventFragment.EditFragmentListener, ViewEventFragment.ViewEventListener {
 
         private Menu menuList;
 
@@ -248,7 +248,9 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
 
     @Override
     public void doneCreateHabit() {
-        getSupportFragmentManager().popBackStack();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new HabitsFragment())
+                .commit();
     }
 
     @Override
@@ -313,5 +315,26 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setVisibility(View.INVISIBLE);
 
+    }
+
+    @Override
+    public void eventRegister() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EventsFragment())
+                .commit();
+    }
+
+    @Override
+    public void eventDrop() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new EventsFragment())
+                .commit();
+    }
+
+    @Override
+    public void confirmHabit() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new HabitsFragment())
+                .commit();
     }
 }
