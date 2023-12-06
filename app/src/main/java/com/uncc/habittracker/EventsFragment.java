@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 
@@ -64,6 +66,7 @@ public class EventsFragment extends Fragment {
         adapter = new EventsAdapter(this.mListener, getActivity());
         binding.recyclerViewEvents.setAdapter(adapter);
 
+
         listenerRegistration = FirebaseFirestore.getInstance().collection("events").orderBy("sponsored", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -73,6 +76,7 @@ public class EventsFragment extends Fragment {
                     return;
                 }
                 Log.d("demo", "inside onEvent ");
+
                 mEvents.clear();
                 int c = 1;
                 for(QueryDocumentSnapshot doc: value)
@@ -86,6 +90,43 @@ public class EventsFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        binding.radioGroupHabitFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton radioButton = (RadioButton) binding.radioGroupHabitFilter.findViewById(binding.radioGroupHabitFilter.getCheckedRadioButtonId());
+                String habitType = radioButton.getText().toString();
+
+                listenerRegistration = FirebaseFirestore.getInstance().collection("events").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if(error != null)
+                        {
+                            error.printStackTrace();
+                            return;
+                        }
+                        Log.d("demo", "inside onEvent ");
+
+                        mEvents.clear();
+                        int c = 1;
+                        for(QueryDocumentSnapshot doc: value)
+                        {
+                            Log.d("demo", "iteration: " + c );
+                            c++;
+                            Event event= doc.toObject(Event.class);
+                            Log.d("demo", "converted obj");
+                            if(event.habitType.compareToIgnoreCase(habitType) == 0 || habitType.compareToIgnoreCase("view all")==0)
+                            {
+                                mEvents.add(event);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+            }
+        });
+
 
         String user = mAuth.getCurrentUser().toString();
         Log.d("TAG", "The current user is" +user);
@@ -182,6 +223,8 @@ public class EventsFragment extends Fragment {
                 if (event.getSponsored()) {
                     mBinding.sponsoredLabel.setVisibility(View.VISIBLE);
                 }
+
+
 
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {

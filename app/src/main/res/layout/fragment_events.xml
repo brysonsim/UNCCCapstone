@@ -11,10 +11,10 @@
         android:id="@+id/recyclerViewEvents"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/buttonCreateEvent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupHabitFilter"
         tools:listitem="@layout/event_row_item" />
 
     <Button
@@ -25,5 +25,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupHabitFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:checkedButton="@id/radioButtonAllFilter"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/radioButtonAllFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="View All" />
+
+        <RadioButton
+            android:id="@+id/radioButtonStudyFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Study" />
+
+        <RadioButton
+            android:id="@+id/radioButtonWorkoutFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Workout" />
+
+        <RadioButton
+            android:id="@+id/radioButtonMindfullnessFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mindfulness" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

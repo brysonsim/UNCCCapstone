@@ -7,13 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".EditEventFragment" >
 
+    <fragment
+        android:id="@+id/autoCompleteLocationFragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:hint="Location"
+        app:layout_constraintBottom_toTopOf="@+id/typeSelector"
+
+        app:layout_constraintEnd_toEndOf="@+id/editTextEventTitle"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription" />
+
     <Button
         android:id="@+id/buttonCancelEventEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="308dp"
         android:text="Cancel"
         app:layout_constraintEnd_toStartOf="@+id/space2"
+        app:layout_constraintHorizontal_bias="0.463"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editSponsoredCheckBox" />
 
@@ -97,9 +111,11 @@
         android:hint="Location"
         android:inputType="textPostalAddress"
         android:minHeight="48dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/editTextEventTitle"
         app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription"
+        tools:visibility="invisible" />
 
     <Space
         android:id="@+id/space2"
@@ -122,3 +138,14 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView2"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextLocation"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextLocation"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
