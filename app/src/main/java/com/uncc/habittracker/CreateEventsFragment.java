@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -34,7 +35,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.data.model.Event;
+
 import com.uncc.habittracker.databinding.FragmentCreateEventsBinding;
 import com.uncc.habittracker.databinding.FragmentCreateHabitBinding;
 
@@ -57,12 +63,36 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
     FragmentCreateEventsBinding binding;
     PlacesClient placesClient;
 
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+
     LatLng currentLocation;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCreateEventsBinding.inflate(inflater, container, false);
+
+        db.collection("users")
+                .whereEqualTo("uid", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+
+                                if (user.getVerified().equals("1")) {
+                                    binding.sponsoredCheckBox.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                });
+
 
         // Initialize the map view
         mapView = binding.mapView;
@@ -74,7 +104,6 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
 
         // Create a new PlacesClient instance
         placesClient = Places.createClient(getActivity());
-
         return binding.getRoot();
     }
 
@@ -96,6 +125,7 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
                 currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
                 Log.d("CREATEVENT", currentLocation.toString());
+                updateMap();
             }
 
             @Override
@@ -139,6 +169,8 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
                     }
                     data.put("location", gp);
 
+
+                    data.put("sponsored", binding.sponsoredCheckBox.isChecked());
                     data.put("title", title);
                     data.put("description", desc);
                     data.put("ownerId", auth.getCurrentUser().getUid());
@@ -175,6 +207,20 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
             }
         });
 
+    }
+    //update map once location is update helper
+    private void updateMap()
+    {
+        if (currentLocation != null && map != null) {
+            map.clear(); // Clear previous markers
+            map.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .title("Selected Location")
+                    .zIndex(10));
+
+            float zoomLevel = 15.0f; // You can set your desired zoom level here
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+        }
     }
 
     CreateEventListener mListener;

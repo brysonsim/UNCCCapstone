@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextEventTitle"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription" />
 
     <Button
         android:id="@+id/buttonCancelEventEdit"
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toStartOf="@+id/space2"
         app:layout_constraintHorizontal_bias="0.463"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+        app:layout_constraintTop_toBottomOf="@+id/editSponsoredCheckBox" />
 
     <EditText
         android:id="@+id/editTextEventTitle"
@@ -125,6 +125,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/buttonCancelEventEdit" />
 
+    <CheckBox
+        android:id="@+id/editSponsoredCheckBox"
+        android:layout_width="106dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Sponsored"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
         android:layout_width="0dp"
@@ -133,6 +145,6 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextLocation"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLocation"
-        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+        app:layout_constraintTop_toBottomOf="@+id/editSponsoredCheckBox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

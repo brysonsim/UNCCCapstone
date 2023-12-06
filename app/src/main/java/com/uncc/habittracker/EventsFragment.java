@@ -29,6 +29,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.uncc.habittracker.data.model.Event;
@@ -66,8 +67,7 @@ public class EventsFragment extends Fragment {
         binding.recyclerViewEvents.setAdapter(adapter);
 
 
-
-        listenerRegistration = FirebaseFirestore.getInstance().collection("events").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration = FirebaseFirestore.getInstance().collection("events").orderBy("sponsored", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if(error != null)
@@ -220,7 +220,9 @@ public class EventsFragment extends Fragment {
                 //needs to change to change the number of attendees
                 mBinding.textViewEventNumberOfAttendees.setText(mEvent.getHabitType());
 
-
+                if (event.getSponsored()) {
+                    mBinding.sponsoredLabel.setVisibility(View.VISIBLE);
+                }
 
 
 

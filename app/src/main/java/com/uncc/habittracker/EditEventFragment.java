@@ -15,6 +15,12 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,11 +35,15 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.uncc.habittracker.data.model.Event;
+import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.databinding.FragmentEditEventBinding;
 
 import java.util.Arrays;
@@ -51,6 +61,8 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
     GoogleMap map;
     Event event;
     FragmentEditEventBinding binding;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
 
     PlacesClient placesClient;
 
@@ -85,6 +97,26 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         binding = FragmentEditEventBinding.inflate(inflater, container, false);
 
+
+        // Checks if the current user is verified to either show the "Sponsored" checkbox or keep it hidden
+        db.collection("users")
+                .whereEqualTo("uid", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                User user = document.toObject(User.class);
+
+                                if (user.getVerified().equals("1")) {
+                                    binding.editSponsoredCheckBox.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                    }
+                });
+
         mapView = binding.mapView2;
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -117,6 +149,7 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
                 currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
 
                 Log.d("CREATEVENT", currentLocation.toString());
+                updateMap();
 
             }
 
@@ -141,6 +174,8 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
         }else if (habit.equals("Mindfulness")){
             binding.typeSelector.check(R.id.rbLifestyle);
         }
+
+        binding.editSponsoredCheckBox.setChecked(event.getSponsored());
 
         binding.buttonCancelEventEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,7 +205,10 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
                 data.put("title", binding.editTextEventTitle.getText().toString().toUpperCase());
                 data.put("description", binding.editTextTextDescription.getText().toString().toUpperCase());
                 data.put("habitType", habitType);
+                data.put("location", gp);
+                data.put("sponsored", binding.editSponsoredCheckBox.isChecked());
                 data.put("location", finalGp);
+
 
                 docRef.update(data)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -183,7 +221,11 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
                                         event.setTitle(binding.editTextEventTitle.getText().toString().toUpperCase());
                                         event.setDescription(binding.editTextTextDescription.getText().toString().toUpperCase());
                                         event.setHabitType(habitType);
+
+                                        event.setSponsored(binding.editSponsoredCheckBox.isChecked());
+
                                         event.setLocation(finalGp); // Use the final variable here
+
                                         mListener.afterEditOpen(event);
                                     }
                                 });
@@ -232,6 +274,19 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLocation, zoomLevel));
 
         map.setTrafficEnabled(true);
+    }
+    private void updateMap()
+    {
+        if (currentLocation != null && map != null) {
+            map.clear(); // Clear previous markers
+            map.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .title("Selected Location")
+                    .zIndex(10));
+
+            float zoomLevel = 15.0f; // You can set your desired zoom level here
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+        }
     }
 
     @Override
