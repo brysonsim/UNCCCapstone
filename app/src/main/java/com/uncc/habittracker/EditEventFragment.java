@@ -149,6 +149,7 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
                 currentLocation = new LatLng(location.getLatitude(),location.getLongitude());
 
                 Log.d("CREATEVENT", currentLocation.toString());
+                updateMap();
 
             }
 
@@ -273,6 +274,19 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLocation, zoomLevel));
 
         map.setTrafficEnabled(true);
+    }
+    private void updateMap()
+    {
+        if (currentLocation != null && map != null) {
+            map.clear(); // Clear previous markers
+            map.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .title("Selected Location")
+                    .zIndex(10));
+
+            float zoomLevel = 15.0f; // You can set your desired zoom level here
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+        }
     }
 
     @Override

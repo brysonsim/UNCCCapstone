@@ -125,6 +125,7 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
                 currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
                 Log.d("CREATEVENT", currentLocation.toString());
+                updateMap();
             }
 
             @Override
@@ -206,6 +207,20 @@ public class CreateEventsFragment extends Fragment implements OnMapReadyCallback
             }
         });
 
+    }
+    //update map once location is update helper
+    private void updateMap()
+    {
+        if (currentLocation != null && map != null) {
+            map.clear(); // Clear previous markers
+            map.addMarker(new MarkerOptions()
+                    .position(currentLocation)
+                    .title("Selected Location")
+                    .zIndex(10));
+
+            float zoomLevel = 15.0f; // You can set your desired zoom level here
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel));
+        }
     }
 
     CreateEventListener mListener;

@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextEventTitle"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription" />
 
     <Button
         android:id="@+id/buttonCancelEventEdit"
@@ -136,7 +136,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView2"
@@ -146,6 +145,6 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextLocation"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/editTextLocation"
-        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+        app:layout_constraintTop_toBottomOf="@+id/editSponsoredCheckBox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
