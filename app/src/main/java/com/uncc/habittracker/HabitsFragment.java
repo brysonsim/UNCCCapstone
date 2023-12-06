@@ -78,14 +78,6 @@ public class HabitsFragment extends Fragment {
         adapter = new HabitsAdapter();
         binding.recyclerView.setAdapter(adapter);
 
-
-                mHabits.clear();
-                //add the habits to an array list for storing based on the habit class scheme
-                for (QueryDocumentSnapshot doc: value) {
-                    Habit habit = doc.toObject(Habit.class);
-                    habit.setDocId(doc.getId());
-                    mHabits.add(habit);
-                }
         getCurrentHabitProgress();
 
         binding.buttonCreateHabit.setOnClickListener(new View.OnClickListener() {
@@ -215,8 +207,7 @@ public class HabitsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull HabitsViewHolder holder, int position) {
-
-            Habit habit = mHabits.get(position);
+            UserHabitDoc habit = mUserHabits.get(position);
             holder.mBinding.deleteHabitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -226,7 +217,7 @@ public class HabitsFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-
+                                    mListener.deleteHabit();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -243,7 +234,6 @@ public class HabitsFragment extends Fragment {
                 }
             });
 
-            UserHabitDoc habit = mUserHabits.get(position);
             holder.setupUI(habit);
         }
 
@@ -306,5 +296,6 @@ public class HabitsFragment extends Fragment {
         void createNewHabit();
         void logout();
         void confirmHabit();
+        void deleteHabit();
     }
 }
