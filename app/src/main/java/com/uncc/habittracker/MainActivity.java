@@ -339,6 +339,12 @@ public class MainActivity extends AppCompatActivity implements LoginFragment.Log
                 .commit();
     }
 
+    public void deleteHabit() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.rootView, new HabitsFragment())
+                .commit();
+    }
+
     @Override
     public void GoToUserProfile(User user) {
         getSupportFragmentManager().beginTransaction()
