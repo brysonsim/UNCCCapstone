@@ -166,6 +166,8 @@ public class EditEventFragment extends Fragment implements OnMapReadyCallback {
         binding.editTextTextDescription.setText(event.getDescription());
         binding.editTextLocation.setText(event.getLocation().toString());
 
+
+
         String habit = event.getHabitType();
         if (habit.equals("Study")){
             binding.typeSelector.check(R.id.rbStudy);

@@ -24,12 +24,12 @@
         android:id="@+id/buttonCancelEventEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="308dp"
+        android:layout_marginLeft="24dp"
         android:text="Cancel"
-        app:layout_constraintEnd_toStartOf="@+id/space2"
-        app:layout_constraintHorizontal_bias="0.463"
+
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editSponsoredCheckBox" />
+        app:layout_constraintTop_toBottomOf="@+id/mapView2" />
 
     <EditText
         android:id="@+id/editTextEventTitle"
@@ -67,8 +67,8 @@
         android:layout_marginEnd="16dp"
         android:text="Update Event"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/space2"
-        app:layout_constraintTop_toTopOf="@+id/buttonCancelEventEdit" />
+
+        app:layout_constraintTop_toBottomOf="@+id/mapView2" />
 
     <RadioGroup
         android:id="@+id/typeSelector"
@@ -117,13 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextTextDescription"
         tools:visibility="invisible" />
 
-    <Space
-        android:id="@+id/space2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonCancelEventEdit" />
+
 
     <CheckBox
         android:id="@+id/editSponsoredCheckBox"
