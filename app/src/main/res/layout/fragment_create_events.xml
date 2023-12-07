@@ -2,62 +2,68 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:padding="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateEventsFragment">
 
-    <Button
-        android:id="@+id/buttonCancelEventCreation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:text="Cancel"
-        app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription" />
-
     <EditText
         android:id="@+id/editTextEventTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
+        android:hint="Title"
+        android:importantForAutofill="no"
         android:inputType="text"
-        android:hint="Event Title"
+        android:minHeight="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextTextMultiLineDescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="start|top"
         android:inputType="textMultiLine"
+        android:importantForAutofill="no"
+        android:minHeight="48dp"
         android:hint="Description"
-        app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextEventTitle" />
 
-    <Button
-        android:id="@+id/buttonCreateEventFinal"
-        android:layout_width="wrap_content"
+    <fragment
+        android:id="@+id/autoCompleteLocationFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="Create Event"
+        android:hint="Location"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/buttonCancelEventCreation" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment" />
+
+
+    <!--<AutoCompleteTextView
+        android:id="@+id/autoCompleteLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:dropDownWidth="match_parent"
+        android:hint="Location"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />-->
 
     <RadioGroup
         android:id="@+id/typeSelector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="32dp"
         android:checkedButton="@id/rbStudy"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPostalAddress">
+        app:layout_constraintTop_toBottomOf="@+id/autoCompleteLocationFragment">
 
         <RadioButton
             android:id="@+id/rbStudy"
@@ -69,9 +75,8 @@
             android:id="@+id/rbWorkOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Work Out"
 
-            />
+            android:text="Work Out" />
 
         <RadioButton
             android:id="@+id/rbLifestyle"
@@ -80,15 +85,41 @@
             android:text="Mindfulness" />
     </RadioGroup>
 
-    <EditText
-        android:id="@+id/editTextTextPostalAddress"
-        android:hint="Location"
+    <Button
+        android:id="@+id/buttonCancelEventCreation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPostalAddress"
-        app:layout_constraintStart_toStartOf="@+id/editTextEventTitle"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLineDescription" />
+        android:layout_marginStart="16dp"
+        android:text="Cancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
 
+    <Button
+        android:id="@+id/buttonCreateEventFinal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:text="Create Event"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapView" />
+
+
+    <CheckBox
+        android:id="@+id/sponsoredCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sponsored"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/typeSelector" />
 </androidx.constraintlayout.widget.ConstraintLayout>

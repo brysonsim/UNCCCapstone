@@ -6,7 +6,7 @@ import com.google.firebase.firestore.GeoPoint;
 public class Event {
     public Timestamp createdAt, time;
     public String description, docId, habitType, ownerId, ownerName, title;
-
+    public boolean sponsored;
     public GeoPoint location;
 
     public Event() {
@@ -84,6 +84,9 @@ public class Event {
         this.location = location;
     }
 
+    public boolean getSponsored() { return sponsored; }
+    public void setSponsored(boolean sponsored) { this.sponsored = sponsored; }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -93,6 +96,7 @@ public class Event {
                 ", habitType='" + habitType + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", ownerName='" + ownerName + '\'' +
+                ", sponsored='" + sponsored + '\'' +
                 ", title='" + title + '\'' +
                 '}';
     }
