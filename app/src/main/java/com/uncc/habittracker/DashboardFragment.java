@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.uncc.habittracker.data.model.Follower;
 import com.uncc.habittracker.data.model.HabitProgress;
 import com.uncc.habittracker.data.model.User;
 import com.uncc.habittracker.data.model.UserHabitDoc;
@@ -91,16 +92,29 @@ public class DashboardFragment extends Fragment {
         // Query Firebase for all users and prepare content for our AutoCompleteTextView
         // TODO: When following logic implemented switch this to only pull users the logged in user
         //   has followed
-        db.collection("users").get().addOnCompleteListener(task -> {
+        db.collection("followers").whereEqualTo("userID", loggedInUserId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (task.getResult() != null) {
+                    ArrayList<String> followedUsers = new ArrayList<>();
+
                     for (QueryDocumentSnapshot doc : task.getResult()) {
-                        User user = doc.toObject(User.class);
-                        Log.d("Debug auto complete", user.getDisplayName());
-                        user.setFirebaseUid(doc.getId());
-                        mUsers.add(user);
-                        autoCompleteAdapterArray.add(user.getDisplayName());
+                        Follower follower = doc.toObject(Follower.class);
+                        followedUsers.add(follower.getFollowingID());
                     }
+
+                    db.collection("users").whereIn("uid", followedUsers).get().addOnCompleteListener(task2 -> {
+                        if (task2.isSuccessful()) {
+                            if (task2.getResult() != null) {
+                                for (QueryDocumentSnapshot doc : task2.getResult()) {
+                                    User user = doc.toObject(User.class);
+                                    Log.d("Debug auto complete", user.getDisplayName());
+                                    user.setFirebaseUid(doc.getId());
+                                    mUsers.add(user);
+                                    autoCompleteAdapterArray.add(user.getDisplayName());
+                                }
+                            }
+                        }
+                    });
                 }
             }
         });
