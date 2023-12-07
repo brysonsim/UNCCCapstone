@@ -19,9 +19,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.uncc.habittracker.data.model.Follower;
 import com.uncc.habittracker.databinding.FragmentHabitsBinding;
 import com.uncc.habittracker.databinding.FragmentSettingsBinding;
 import com.uncc.habittracker.databinding.FragmentUserAccountBinding;
@@ -55,6 +59,7 @@ public class AccountFragment extends Fragment {
                                 TextView userName = getView().findViewById(R.id.userNametxt);
                                 TextView aboutSection = getView().findViewById(R.id.aboutTxt);
                                 userName.setText(document.getString("firstName") + " " + document.getString("lastName"));
+                                findFollowers();
 
 
                                 if(document.getString("about") == "" || document.getString("about") == null){
@@ -75,6 +80,25 @@ public class AccountFragment extends Fragment {
             }
         });
         return binding.getRoot();
+    }
+
+    private void findFollowers(){
+        db.collection("followers")
+                .whereEqualTo("followingID", auth.getCurrentUser().getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+             int count = 0;
+             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                 if (task.isSuccessful()) {
+                     for (QueryDocumentSnapshot document : task.getResult()) {
+                         count ++;
+
+                     }
+                 }
+                 binding.userFollowerNum.setText("Followers: " + count);
+             }
+         });
     }
 
     @Override
