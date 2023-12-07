@@ -78,14 +78,16 @@ public class ViewEventFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
 
         // If event is in the past, hide register/drop buttons
-        if (event.getTime().compareTo(Timestamp.now()) < 0) {
+        // TODO: Add back in when we have the ability to select a custom date and time for the event
+        /*if (event.getTime().compareTo(Timestamp.now()) < 0) {
             binding.buttonDrop.setVisibility(View.GONE);
             binding.buttonRegister.setVisibility(View.GONE);
         }
         // Determine whether the user is currently registered for the event. This will control
         // whether the Register or Drop button is shown. Do not show anything if the user created
         // the event.
-        else if (!event.getOwnerId().equals(userId)) {
+        else */
+        if (!event.getOwnerId().equals(userId)) {
             db.collection("habitProgress")
                     .whereEqualTo("userId", userId)
                     .whereEqualTo("eventDocId", event.getDocId())
