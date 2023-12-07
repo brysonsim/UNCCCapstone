@@ -40,6 +40,7 @@ public class FollowingUserProfile extends Fragment {
     FirebaseFirestore db =  FirebaseFirestore.getInstance();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     ArrayList<Follower> followers = new ArrayList<>();
+    int followerNum;
 
 
 
@@ -65,12 +66,14 @@ public class FollowingUserProfile extends Fragment {
     {
         super.onViewCreated(view, savedInstanceState);
         String firstName, lastName, uid, about, firebaseUid, verified;
+
         firstName = user.getFirstName();
         lastName = user.getLastName();
         about = user.getAbout();
         uid = user.getUid();
         binding.followerAbout.setText(about);
         binding.userNametxt.setText(firstName+" "+lastName);
+
         String currentUid = mAuth.getCurrentUser().getUid();
         Log.d("TAG", "current uid " + currentUid);
         Log.d("TAG", "current uid follower" + uid);
@@ -93,6 +96,7 @@ public class FollowingUserProfile extends Fragment {
                     boolean followExists = false;
 
                     int x= followers.size();
+                    binding.userFollowerNum.setText("Followers: " + followers.size());
                     for (int i = 0; i < x; i++) {
                         String inDocUser = followers.get(i).getUserID();
                         String inFollwerUser = followers.get(i).getFollowingID();
