@@ -97,7 +97,7 @@ public class EventsFragment extends Fragment {
                 RadioButton radioButton = (RadioButton) binding.radioGroupHabitFilter.findViewById(binding.radioGroupHabitFilter.getCheckedRadioButtonId());
                 String habitType = radioButton.getText().toString();
 
-                listenerRegistration = FirebaseFirestore.getInstance().collection("events").addSnapshotListener(new EventListener<QuerySnapshot>() {
+                listenerRegistration = FirebaseFirestore.getInstance().collection("events").orderBy("sponsored", Query.Direction.DESCENDING).addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                         if(error != null)
@@ -223,8 +223,9 @@ public class EventsFragment extends Fragment {
                 if (event.getSponsored()) {
                     mBinding.sponsoredLabel.setVisibility(View.VISIBLE);
                 }
-
-
+                else {
+                    mBinding.sponsoredLabel.setVisibility(View.INVISIBLE);
+                }
 
                 if(mAuth.getCurrentUser().getUid().equals(mEvent.getOwnerId()))
                 {
