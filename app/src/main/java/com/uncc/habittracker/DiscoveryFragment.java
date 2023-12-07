@@ -70,7 +70,10 @@ public class DiscoveryFragment extends Fragment {
                 mUsers.clear();
                 for(QueryDocumentSnapshot doc: value){
                     User user = doc.toObject(User.class);
-                    mUsers.add(user);
+
+                    if (!user.getUid().equals(mAuth.getUid())) {
+                        mUsers.add(user);
+                    }
                 }
                 adapter.notifyDataSetChanged();
 

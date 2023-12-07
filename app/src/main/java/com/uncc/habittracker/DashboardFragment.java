@@ -102,19 +102,22 @@ public class DashboardFragment extends Fragment {
                         followedUsers.add(follower.getFollowingID());
                     }
 
-                    db.collection("users").whereIn("uid", followedUsers).get().addOnCompleteListener(task2 -> {
-                        if (task2.isSuccessful()) {
-                            if (task2.getResult() != null) {
-                                for (QueryDocumentSnapshot doc : task2.getResult()) {
-                                    User user = doc.toObject(User.class);
-                                    Log.d("Debug auto complete", user.getDisplayName());
-                                    user.setFirebaseUid(doc.getId());
-                                    mUsers.add(user);
-                                    autoCompleteAdapterArray.add(user.getDisplayName());
+                    if (followedUsers.size() > 0)
+                    {
+                        db.collection("users").whereIn("uid", followedUsers).get().addOnCompleteListener(task2 -> {
+                            if (task2.isSuccessful()) {
+                                if (task2.getResult() != null) {
+                                    for (QueryDocumentSnapshot doc : task2.getResult()) {
+                                        User user = doc.toObject(User.class);
+                                        Log.d("Debug auto complete", user.getDisplayName());
+                                        user.setFirebaseUid(doc.getId());
+                                        mUsers.add(user);
+                                        autoCompleteAdapterArray.add(user.getDisplayName());
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
