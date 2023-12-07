@@ -78,7 +78,7 @@ public class FollowingUserProfile extends Fragment {
         Log.d("TAG", "current uid " + currentUid);
         Log.d("TAG", "current uid follower" + uid);
 
-        listenerRegistration = FirebaseFirestore.getInstance().collection("followers").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        listenerRegistration = FirebaseFirestore.getInstance().collection("followers").whereEqualTo("followingID", uid).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if(error!=null){
