@@ -277,15 +277,18 @@ public class DashboardFragment extends Fragment {
                                 if (selectedUserHabit.size() > 0) {
                                     ArrayList<HabitProgress> mHabitProgressSecondary = new ArrayList<>(selectedUserHabit);
 
+                                    UserHabitDoc selectedUH = new UserHabitDoc();
+                                    selectedUH.setDocId(mHabitProgressSecondary.stream().findFirst().get().getUserHabitDocId());
+
                                     switch (userHabit.getFrequency()) {
                                         case "Daily":
-                                            userHabit.setProgressSecondary(DateUtils.getDailyProgressForWeek(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getDailyProgressForWeek(mHabitProgressSecondary, selectedUH));
                                             break;
                                         case "Weekly":
-                                            userHabit.setProgressSecondary(DateUtils.getWeeklyProgressForWeek(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getWeeklyProgressForWeek(mHabitProgressSecondary, selectedUH));
                                             break;
                                         default:
-                                            userHabit.setProgressSecondary(DateUtils.getMonthlyProgress(mHabitProgressSecondary, userHabit));
+                                            userHabit.setProgressSecondary(DateUtils.getMonthlyProgress(mHabitProgressSecondary, selectedUH));
                                             break;
                                     }
                                 }
